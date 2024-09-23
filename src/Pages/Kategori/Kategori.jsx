@@ -12,17 +12,25 @@ import Typography from "@mui/material/Typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Alerts from "../../Components/Alert";
 
+
 import axios from "axios";
 
 function Kategori() {
-  const { setCategory, category, newCategory, setNewCategory } =
-    useContext(BookContext);
+  const {
+    setCategory,
+    category,
+    newCategory,
+    setNewCategory,
+    setUpdate,
+    update,
+    getCategory
+  } = useContext(BookContext);
   const tr = ["Name", "Desription", "Delete"];
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/categories`)
-      .then((res) => setCategory(res.data));
-  }, [newCategory]);
+    
+
+    getCategory();
+  }, [update]);
 
   const newCategoryİnp = (e) => {
     const { name, value } = e.target;
@@ -30,6 +38,7 @@ function Kategori() {
       ...newCategory,
       [name]: value,
     });
+    setUpdate(false);
   };
 
   const sendToCategory = () => {
@@ -44,6 +53,7 @@ function Kategori() {
           name: "",
           description: "",
         });
+        setUpdate(false);
       })
       .catch((error) => {
         console.error("Bir hata oluştu:", error);
@@ -58,12 +68,12 @@ function Kategori() {
       )
       .then(() => {
         setCategory((prev) => prev.filter((items) => items.id !== item.id));
+        setUpdate(false);
       });
   };
 
   return (
     <div className="kategori">
-
       <Alerts severity={"info"} />
 
       <Accordion className="addİtem">

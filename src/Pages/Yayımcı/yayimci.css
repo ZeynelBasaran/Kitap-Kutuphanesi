@@ -15,14 +15,15 @@
     width: 92%;
 }
 
-th:nth-child(4),
-td:nth-child(4){
-  width: 7%; /* İkinci sütunu daha dar yap */
+.yayimci th:nth-child(5),
+.yayimci td:nth-child(5),.yayimci th:nth-child(1),
+.yayimci td:nth-child(1){
+  width: 1%;
   text-align: center; /* Ortalamak için */
   padding: 5px;
 }
-th:nth-child(2),
-td:nth-child(2){
+.yayimci th:nth-child(3),
+.yayimci td:nth-child(3){
   width: 5%; /* İkinci sütunu daha dar yap */
   text-align: center; /* Ortalamak için */
 }

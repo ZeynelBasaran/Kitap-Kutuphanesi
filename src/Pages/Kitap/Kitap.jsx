@@ -9,9 +9,9 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Button from "@mui/material/Button";
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
-import "./kitap.css"
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import "./kitap.css";
 
 const kitap = [
   {
@@ -42,24 +42,30 @@ const kitap = [
 ];
 
 function Kitap() {
-  const { newBook, setNewBook, setBooks } = useContext(BookContext);
+  const {
+    newBook,
+    setNewBook,
+    setBooks,
+    publisher,
+    author,
+    category,
+    update,
+    setUpdate,
+    getPublisher,
+    getCategory,
+    getAuthor,
+    getBooks,
+  } = useContext(BookContext);
 
   //Get to Book
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/books`)
-      .then((res) => setBooks(res.data));
-  }, [newBook]);
+    getAuthor();
+    getPublisher();
+    getCategory();
+    getBooks();
+  }, [update]);
 
-  const newBookİnp = (e) => {
-    const { name, value } = e.target;
-    setNewBook({
-      ...newBook,
-      [name]: value,
-    });
-    console.log(newBook);
-  };
-  //Add New Book
+  //Send to new Book Database
   const sendToBook = () => {
     axios
       .post(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/publishers`, newBook)
@@ -70,12 +76,38 @@ function Kitap() {
           establishmentYear: "",
           address: "",
         });
+        setUpdate(false);
       })
       .catch((error) => {
         console.error("Bir hata oluştu:", error);
       });
   };
 
+  //Add New Book
+  const newBookİnp = (e) => {
+    const { name, value } = e.target;
+    setNewBook({
+      ...newBook,
+      [name]: value,
+    });
+    
+  };
+
+  const authorSelect = (e) => {
+    const { value } = e.target;
+    const selectAuthor = author.find((item) => item.id === value);
+    const selectPublisher = publisher.find((item) => item.id === value);
+    //const selectCategory = category.find((item) => item.id === value);
+
+    console.log(selectPublisher);
+    setNewBook((prev) => ({
+      ...prev,
+      author: selectAuthor,
+      publisher:[selectPublisher],
+      //categories:selectCategory,
+    }));
+    console.log(newBook);
+  };
   return (
     <div className="kitap">
       <Accordion className="addİtem">
@@ -97,7 +129,7 @@ function Kitap() {
             <TextField
               required
               id="outlined-required"
-              label="Publication Year"
+              label="Publication Name"
               type="text"
               onChange={newBookİnp}
               value={newBook.name}
@@ -126,6 +158,58 @@ function Kitap() {
               type="number"
             />
           </Box>
+
+          <div>
+            <Select
+              name="author"
+              defaultValue={0}
+              onChange={authorSelect}
+              size="small"
+            >
+              <MenuItem value={0} disabled>
+                Select Author
+              </MenuItem>
+
+              {author?.map((item, idx) => (
+                <MenuItem value={item.id} key={`${item}${idx}`}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <Select
+              name="publisher"
+              defaultValue={0}
+              onChange={authorSelect}
+              size="small"
+            >
+              <MenuItem value={0} disabled>
+                Select Publisher
+              </MenuItem>
+              {publisher?.map((item, idx) => (
+                <option value={item.id} key={`${item}${idx}`}>
+                  {item.name}
+                </option>
+              ))}
+            </Select>
+
+            <Select
+              name="categories"
+              defaultValue={0}
+              onChange={authorSelect}
+              size="small"
+            >
+              <MenuItem value={0} disabled>
+                Select Category
+              </MenuItem>
+              {category?.map((item, idx) => (
+                <option value={item.id} key={`${item}${idx}`}>
+                  {item.name}
+                </option>
+              ))}
+            </Select>
+          </div>
+
           <div>
             <Button variant="contained" color="success" onClick={sendToBook}>
               ADD
@@ -138,3 +222,13 @@ function Kitap() {
 }
 
 export default Kitap;
+
+/*
+
+
+        
+           
+
+          
+
+*/

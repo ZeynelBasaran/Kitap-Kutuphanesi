@@ -13,15 +13,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "./yazar.css";
 
 function Yazar() {
-  const { author, setAuthor, newAuthor, setNewAuthor } =
+  const { author, setAuthor, newAuthor, setNewAuthor,update,getAuthor } =
     useContext(BookContext);
   const tr = ["Name", "BirthDate", "Country", "Delete"];
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors`)
-      .then((res) => setAuthor(res.data));
-  }, [newAuthor]);
+    
+    getAuthor();
+  }, [update]);
 
   const newAuthorİnp = (e) => {
     const { name, value } = e.target;
@@ -29,6 +28,7 @@ function Yazar() {
       ...newAuthor,
       [name]: value,
     });
+    setAuthor(false)
   };
 
   //Remove Author
@@ -37,6 +37,7 @@ function Yazar() {
       .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors/${item.id}`)
       .then(() => {
         setAuthor((prev) => prev.filter((items) => items.id !== item.id));
+        setAuthor(false)
       });
   };
 
@@ -50,6 +51,7 @@ function Yazar() {
           birthDate: "",
           country: "",
         });
+        setAuthor(false)
       })
       .catch((error) => {
         console.error("Bir hata oluştu:", error);
@@ -130,7 +132,8 @@ function Yazar() {
               <td>{item.birthDate}</td>
               <td>{item.country}</td>
               <td>
-                <DeleteIcon className="delete-icon"
+                <DeleteIcon
+                  className="delete-icon"
                   onClick={() => {
                     removeAuthor(item);
                   }}

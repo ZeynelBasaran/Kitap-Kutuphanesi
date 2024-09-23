@@ -9,25 +9,25 @@ export default function AlertMessage({ type, message }) {
             case "success":
               return (
                 <Alert variant="filled" severity="success">
-                  {message} This is a filled success Alert.
+                  {message}
                 </Alert>
               );
             case "info":
               return (
                 <Alert variant="filled" severity="info">
-                  {message} This is a filled info Alert.
+                  {message} 
                 </Alert>
               );
             case "warning":
               return (
                 <Alert variant="filled" severity="warning">
-                  {message} This is a filled warning Alert.
+                  {message} 
                 </Alert>
               );
             case "error":
               return (
                 <Alert variant="filled" severity="error">
-                  {message} This is a filled error Alert.
+                  {message}
                 </Alert>
               );
             default:

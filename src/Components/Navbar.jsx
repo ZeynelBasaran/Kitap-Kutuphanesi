@@ -1,6 +1,5 @@
-
-import İmage1 from "/public/bg-book.png";
 import { Link } from "react-router-dom";
+import AutoStoriesTwoToneIcon from "@mui/icons-material/AutoStoriesTwoTone";
 
 function Navbar() {
   return (
@@ -8,8 +7,7 @@ function Navbar() {
       <nav className="navbar">
         <div className="logo">
           <Link to="/">
-            <img src={İmage1} alt="" />
-            
+            <AutoStoriesTwoToneIcon fontSize="large" />
           </Link>
         </div>
         <ul className="menu1">
@@ -27,7 +25,7 @@ function Navbar() {
           </li>
         </ul>
         <ul className="menu2">
-        <li>
+          <li>
             <Link to="/KitapAlma">Kitap Al</Link>
           </li>
         </ul>
