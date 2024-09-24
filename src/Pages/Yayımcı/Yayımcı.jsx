@@ -120,6 +120,8 @@ function Yayımcı() {
     setEditPublisher(item);
   };
 
+  console.log(typeof publisher)
+
   return (
     <div className="yayimci">
       <Alerts type={alerts.type} message={alerts.message} />

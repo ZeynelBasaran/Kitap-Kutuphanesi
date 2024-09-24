@@ -67,6 +67,7 @@ function Kitap() {
 
   //Send to new Book Database
   const sendToBook = () => {
+    console.log("bitti", newBook);
     axios
       .post(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/publishers`, newBook)
       .then((response) => {
@@ -90,24 +91,36 @@ function Kitap() {
       ...newBook,
       [name]: value,
     });
-    
   };
 
   const authorSelect = (e) => {
     const { value } = e.target;
     const selectAuthor = author.find((item) => item.id === value);
-    const selectPublisher = publisher.find((item) => item.id === value);
-    //const selectCategory = category.find((item) => item.id === value);
-
-    console.log(selectPublisher);
     setNewBook((prev) => ({
       ...prev,
       author: selectAuthor,
-      publisher:[selectPublisher],
-      //categories:selectCategory,
     }));
-    console.log(newBook);
   };
+
+  const categorySelect = (e) => {
+    const { value } = e.target;
+    const selectCategory = category.find((item) => item.id === value);
+
+    setNewBook((prev) => ({
+      ...prev,
+      categories: selectCategory,
+    }));
+  };
+
+  const publisherSelect = (e) => {
+    const { value } = e.target;
+    const selectPublisher = publisher.find((item) => item.id === value);
+    setNewBook((prev) => ({
+      ...prev,
+      publisher: selectPublisher,
+    }));
+  };
+
   return (
     <div className="kitap">
       <Accordion className="addİtem">
@@ -171,7 +184,7 @@ function Kitap() {
               </MenuItem>
 
               {author?.map((item, idx) => (
-                <MenuItem value={item.id} key={`${item}${idx}`}>
+                <MenuItem value={item.id} key={`${item.name}${idx}`}>
                   {item.name}
                 </MenuItem>
               ))}
@@ -180,32 +193,33 @@ function Kitap() {
             <Select
               name="publisher"
               defaultValue={0}
-              onChange={authorSelect}
+              onChange={publisherSelect}
               size="small"
             >
               <MenuItem value={0} disabled>
                 Select Publisher
               </MenuItem>
+
               {publisher?.map((item, idx) => (
-                <option value={item.id} key={`${item}${idx}`}>
+                <MenuItem value={item.id} key={`${item.name}${idx}`}>
                   {item.name}
-                </option>
+                </MenuItem>
               ))}
             </Select>
 
             <Select
               name="categories"
               defaultValue={0}
-              onChange={authorSelect}
+              onChange={categorySelect}
               size="small"
             >
               <MenuItem value={0} disabled>
                 Select Category
               </MenuItem>
               {category?.map((item, idx) => (
-                <option value={item.id} key={`${item}${idx}`}>
+                <MenuItem value={item.id} key={`${item.name}${idx}`}>
                   {item.name}
-                </option>
+                </MenuItem>
               ))}
             </Select>
           </div>
@@ -227,6 +241,8 @@ export default Kitap;
 
 
         
+
+            
            
 
           

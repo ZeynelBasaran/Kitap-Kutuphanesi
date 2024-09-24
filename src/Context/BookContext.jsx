@@ -102,6 +102,7 @@ function BookContextComp({ children }) {
       console.log("Category Yüklendi.");
     }
   };
+
   const getAuthor = async () => {
     try {
       const response = await axios.get(
@@ -116,7 +117,8 @@ function BookContextComp({ children }) {
       console.log("Author Yüklendi.");
     }
   };
-  const getBooks= async () => {
+
+  const getBooks = async () => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_APP_BASE_URL}/api/v1/books`

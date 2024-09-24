@@ -13,12 +13,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "./yazar.css";
 
 function Yazar() {
-  const { author, setAuthor, newAuthor, setNewAuthor,update,getAuthor } =
+  const { author, setAuthor, newAuthor, setNewAuthor,update,getAuthor,setUpdate } =
     useContext(BookContext);
   const tr = ["Name", "BirthDate", "Country", "Delete"];
 
   useEffect(() => {
-    
     getAuthor();
   }, [update]);
 
@@ -28,7 +27,7 @@ function Yazar() {
       ...newAuthor,
       [name]: value,
     });
-    setAuthor(false)
+    setUpdate(false)
   };
 
   //Remove Author
@@ -37,7 +36,7 @@ function Yazar() {
       .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors/${item.id}`)
       .then(() => {
         setAuthor((prev) => prev.filter((items) => items.id !== item.id));
-        setAuthor(false)
+        setUpdate(false)
       });
   };
 
@@ -51,12 +50,14 @@ function Yazar() {
           birthDate: "",
           country: "",
         });
-        setAuthor(false)
+        setUpdate(false)
       })
       .catch((error) => {
         console.error("Bir hata oluştu:", error);
       });
   };
+
+  console.log(typeof author)
 
   return (
     <div className="yazar">
@@ -126,7 +127,7 @@ function Yazar() {
           </tr>
         </thead>
         <tbody>
-          {author.map((item, idx) => (
+          {author?.map((item, idx) => (
             <tr key={`${item}${idx}`}>
               <td>{item.name}</td>
               <td>{item.birthDate}</td>
