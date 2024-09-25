@@ -29,11 +29,42 @@ function BookContextComp({ children }) {
     name: "",
     description: "",
   });
+  const [editCategory, setEditCategory] = useState({
+    id:"",
+    name: "",
+    description: "",
+  });
+
 
 
   //Books States
-  const [books, setBooks] = useState({});
+  const [books, setBooks] = useState([]);
   const [newBook, setNewBook] = useState({
+    id: 0,
+    name: "",
+    publicationYear: 0,
+    stock: 0,
+    author: {
+      id: 0,
+      name: "",
+      birthDate: "",
+      country: ""
+    },
+    publisher: {
+      id: 0,
+      name: "",
+      establishmentYear: 0,
+      address: ""
+    },
+    categories: [
+      {
+        id: 0,
+        name: "",
+        description: ""
+      }
+    ]
+  });
+  const [editBook, setEditBook] = useState({
     id: 0,
     name: "",
     publicationYear: 0,
@@ -67,13 +98,20 @@ function BookContextComp({ children }) {
     birthDate: "",
     country: "",
   });
+  const [editAuthor, setEditAuthor] = useState({
+    id:"",
+    name: "",
+    birthDate: "",
+    country: "",
+  });
+
 
   const [alerts, setAlerts] = useState({
     type: "",
     message: "",
   });
 
-//Datebase Get İstekleri
+//Get Datebase
   const getPublisher = async () => {
     try {
       const response = await axios.get(
@@ -99,7 +137,7 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("Category Yüklendi.");
+      //console.log("Category Yüklendi.");
     }
   };
 
@@ -114,7 +152,7 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("Author Yüklendi.");
+      //console.log("Author Yüklendi.");
     }
   };
 
@@ -129,7 +167,7 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      console.log("Books Yüklendi.");
+      //console.log("Books Yüklendi.");
     }
   };
 
@@ -162,7 +200,13 @@ function BookContextComp({ children }) {
         getPublisher,
         getCategory,
         getAuthor,
-        getBooks
+        getBooks,
+        editCategory,
+        setEditCategory,
+        editAuthor,
+        setEditAuthor,
+        setEditBook,
+        editBook
       }}
     >
       {children}

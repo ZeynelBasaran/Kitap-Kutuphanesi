@@ -11,6 +11,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Alerts from "../../Components/Alert";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
 
 import axios from "axios";
@@ -23,24 +24,19 @@ function Kategori() {
     setNewCategory,
     setUpdate,
     update,
-    getCategory
+    getCategory,
+    editCategory,
+    setEditCategory,
+    alerts
   } = useContext(BookContext);
-  const tr = ["Name", "Desription", "Delete"];
+  const tr = ["Edit","Name", "Description", "Delete"];
+  
+  //Get to Category
   useEffect(() => {
-    
-
     getCategory();
   }, [update]);
 
-  const newCategoryİnp = (e) => {
-    const { name, value } = e.target;
-    setNewCategory({
-      ...newCategory,
-      [name]: value,
-    });
-    setUpdate(false);
-  };
-
+  //Add New Publisher post
   const sendToCategory = () => {
     axios
       .post(
@@ -59,6 +55,15 @@ function Kategori() {
         console.error("Bir hata oluştu:", error);
       });
   };
+  //Add New Publisher İnput value
+  const newCategoryİnp = (e) => {
+    const { name, value } = e.target;
+    setNewCategory({
+      ...newCategory,
+      [name]: value,
+    });
+    setUpdate(false);
+  };
 
   //Remove Category
   const removeCategory = (item) => {
@@ -72,9 +77,45 @@ function Kategori() {
       });
   };
 
+  //Edit Category
+  const sendEditCategoryİnp = () => {
+    
+    axios
+      .put(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/v1/categories/${
+          editCategory.id
+        }`,
+        editCategory
+      )
+      .then(() => {
+        setEditCategory({
+          id:"",
+          name: "",
+          description: "",
+        });
+        setUpdate(false);
+        console.log(editCategory)
+      });
+  };
+
+  //Edit Category İnp Value
+  const editCategoryİnp = (e) => {
+    const { name, value } = e.target;
+    setEditCategory((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    console.log(editCategory,"input")
+    
+  };
+  //Edit Publisher Button event
+  const handleEditBtn = (item) => {
+    setEditCategory(item);
+  };
+
   return (
     <div className="kategori">
-      <Alerts severity={"info"} />
+      <Alerts type={alerts.type} message={alerts.message} />
 
       <Accordion className="addİtem">
         <AccordionSummary
@@ -92,31 +133,26 @@ function Kategori() {
             autoComplete="off"
             className="input-box"
           >
-            <div>
-              <TextField
-                required
-                id="outlined-required"
-                label="Category Name"
-                className=""
-                onChange={newCategoryİnp}
-                value={newCategory.name}
-                name="name"
-                size="small"
-              />
-              <TextField
-                required
-                id="outlined-required"
-                label="Description"
-                className=""
-                onChange={newCategoryİnp}
-                value={newCategory.description}
-                name="description"
-                size="small"
-              />
-            </div>
-          </Box>
-
-          <div>
+            <TextField
+              required
+              id="outlined-required"
+              label="Category Name"
+              className=""
+              onChange={newCategoryİnp}
+              value={newCategory.name}
+              name="name"
+              size="small"
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Description"
+              className=""
+              onChange={newCategoryİnp}
+              value={newCategory.description}
+              name="description"
+              size="small"
+            />
             <Button
               variant="contained"
               color="success"
@@ -124,7 +160,53 @@ function Kategori() {
             >
               ADD TO CATEGORY
             </Button>
-          </div>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion className="addİtem">
+        <AccordionSummary
+          expandIcon={<ArrowDropDownIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography>EDİT CATEGORY</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="off"
+            className="input-box"
+          >
+            <TextField
+              required
+              id="outlined-required"
+              label="Category Name"
+              className=""
+              onChange={editCategoryİnp}
+              value={editCategory.name}
+              name="name"
+              size="small"
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Description"
+              className=""
+              onChange={editCategoryİnp}
+              value={editCategory.description}
+              name="description"
+              size="small"
+            />
+            <Button
+              variant="contained"
+              color="success"
+              onClick={sendEditCategoryİnp}
+            >
+              CHANGE CATEGORY
+            </Button>
+          </Box>
         </AccordionDetails>
       </Accordion>
 
@@ -139,16 +221,25 @@ function Kategori() {
         <tbody>
           {category.map((item, idx) => (
             <tr key={`${item}${idx}`}>
+
+               <td className="cursor-icon">
+                <ModeEditIcon
+                  onClick={() => {
+                    handleEditBtn(item);
+                  }}
+                />
+                </td>
               <td>{item.name}</td>
               <td>{item.description}</td>
               <td>
                 <DeleteIcon
-                  className="delete-icon"
+                  className="cursor-icon"
                   onClick={() => {
                     removeCategory(item);
                   }}
                 />
               </td>
+             
             </tr>
           ))}
         </tbody>

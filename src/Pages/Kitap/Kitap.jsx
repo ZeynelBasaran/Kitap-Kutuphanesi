@@ -11,35 +11,11 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import "./kitap.css";
 
-const kitap = [
-  {
-    id: 0,
-    name: "string",
-    publicationYear: 0,
-    stock: 0,
-    author: {
-      id: 0,
-      name: "string",
-      birthDate: "2024-09-20",
-      country: "string",
-    },
-    publisher: {
-      id: 0,
-      name: "string",
-      establishmentYear: 0,
-      address: "string",
-    },
-    categories: [
-      {
-        id: 0,
-        name: "string",
-        description: "string",
-      },
-    ],
-  },
-];
+import Alerts from "../../Components/Alert";
 
 function Kitap() {
   const {
@@ -55,9 +31,15 @@ function Kitap() {
     getCategory,
     getAuthor,
     getBooks,
+    books,
+    setAlerts,
+    editBook,
+    setEditBook,
+    alerts
   } = useContext(BookContext);
+  const tr = ["Edit", "Book Name", "Author İnfo", "Categories","Publisher İnfo", "Delete"];
 
-  //Get to Book
+  //Get to Books
   useEffect(() => {
     getAuthor();
     getPublisher();
@@ -69,7 +51,7 @@ function Kitap() {
   const sendToBook = () => {
     console.log("bitti", newBook);
     axios
-      .post(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/publishers`, newBook)
+      .post(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/books`, newBook)
       .then((response) => {
         console.log("Veri başarıyla gönderildi:", response.data);
         setNewBook({
@@ -84,7 +66,7 @@ function Kitap() {
       });
   };
 
-  //Add New Book
+  //Add New Publisher İnput and select value
   const newBookİnp = (e) => {
     const { name, value } = e.target;
     setNewBook({
@@ -92,7 +74,6 @@ function Kitap() {
       [name]: value,
     });
   };
-
   const authorSelect = (e) => {
     const { value } = e.target;
     const selectAuthor = author.find((item) => item.id === value);
@@ -101,17 +82,14 @@ function Kitap() {
       author: selectAuthor,
     }));
   };
-
   const categorySelect = (e) => {
     const { value } = e.target;
     const selectCategory = category.find((item) => item.id === value);
-
     setNewBook((prev) => ({
       ...prev,
-      categories: selectCategory,
+      categories: [selectCategory],
     }));
   };
-
   const publisherSelect = (e) => {
     const { value } = e.target;
     const selectPublisher = publisher.find((item) => item.id === value);
@@ -121,8 +99,105 @@ function Kitap() {
     }));
   };
 
+  //Remove Book
+  const removeBook = (item) => {
+    axios
+      .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/books/${item.id}`)
+      .then(() => {
+        setBooks((prev) => prev.filter((items) => items.id !== item.id));
+        setAlerts({
+          type: "error",
+          message: "Publisher successfully deleted",
+        });
+        setUpdate(false);
+      });
+  };
+
+  //Edit Publisher
+  const sendEditBookİnp = () => {
+    axios
+      .put(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/v1/books/${editBook.id}`,
+        editBook
+      )
+      .then(() => {
+        setEditBook({
+          id: 0,
+          name: "",
+          publicationYear: 0,
+          stock: 0,
+          author: {
+            id: 0,
+            name: "",
+            birthDate: "",
+            country: "",
+          },
+          publisher: {
+            id: 0,
+            name: "",
+            establishmentYear: 0,
+            address: "",
+          },
+          categories: [
+            {
+              id: 0,
+              name: "",
+              description: "",
+            },
+          ],
+        });
+        setUpdate(false);
+      });
+  };
+
+  //Edit Publisher İnput ve select value
+  const editBookİnp = (e) => {
+    const { name, value } = e.target;
+    setEditBook((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  const editAuthorSelect = (e) => {
+    const { value } = e.target;
+    const selectAuthor = author.find((item) => item.id === value);
+    setNewBook((prev) => ({
+      ...prev,
+      author: selectAuthor,
+    }));
+  };
+  const editCategorySelect = (e) => {
+    const { value } = e.target;
+    const selectCategory = category.find((item) => item.id === value);
+    setNewBook((prev) => ({
+      ...prev,
+      categories: [selectCategory],
+    }));
+  };
+  const editPublisherSelect = (e) => {
+    const { value } = e.target;
+    const selectPublisher = publisher.find((item) => item.id === value);
+    setNewBook((prev) => ({
+      ...prev,
+      publisher: selectPublisher,
+    }));
+  };
+
+  //Edit Publisher Button
+  const handleEditBtn = (item) => {
+    setEditBook(item);
+  };
+
+  console.log(editBook);
+  console.log(editBook.author.name, "deneme");
+  console.log(editBook.categories.name, "deneme");
+  console.log(editBook.publisher.name, "deneme");
+
   return (
+    
+   
     <div className="kitap">
+      <Alerts type={alerts.type} message={alerts.message} />
       <Accordion className="addİtem">
         <AccordionSummary
           expandIcon={<ArrowDropDownIcon />}
@@ -172,7 +247,13 @@ function Kitap() {
             />
           </Box>
 
-          <div>
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="on"
+            className="input-box selectBox"
+          >
             <Select
               name="author"
               defaultValue={0}
@@ -222,16 +303,176 @@ function Kitap() {
                 </MenuItem>
               ))}
             </Select>
-          </div>
+          </Box>
 
-          <div>
+          <Box className="addBox">
             <Button variant="contained" color="success" onClick={sendToBook}>
-              ADD
+              ADD TO BOOK
             </Button>
-          </div>
+          </Box>
         </AccordionDetails>
       </Accordion>
+
+      <Accordion className="addİtem">
+        <AccordionSummary
+          expandIcon={<ArrowDropDownIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography>EDİT BOOK</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="on"
+            className="input-box"
+          >
+            <TextField
+              required
+              id="outlined-required"
+              label="Publication Name"
+              type="text"
+              onChange={editBookİnp}
+              value={editBook.name}
+              name="name"
+              size="small"
+            />
+
+            <TextField
+              required
+              id="outlined-required"
+              label="Publication Year"
+              type="number"
+              onChange={editBookİnp}
+              value={editBook.publicationYear}
+              name="publicationYear"
+              size="small"
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Stock"
+              onChange={editBookİnp}
+              value={editBook.stock}
+              name="stock"
+              size="small"
+              type="number"
+            />
+          </Box>
+
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="on"
+            className="input-box selectBox"
+          >
+            <Select
+              name="author"
+              defaultValue={0}
+              onChange={editAuthorSelect}
+              size="small"
+              value={editBook.author.name}
+            >
+              <MenuItem value={0} disabled>
+                Select Author
+              </MenuItem>
+
+              {author?.map((item, idx) => (
+                <MenuItem value={item.id} key={`${item.name}${idx}`}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <Select
+              name="publisher"
+              defaultValue={0}
+              onChange={editPublisherSelect}
+              size="small"
+              defaultValue={editBook.publisher.name}
+            >
+              <MenuItem value={0} disabled>
+                Select Publisher
+              </MenuItem>
+
+              {publisher?.map((item, idx) => (
+                <MenuItem value={item.id} key={`${item.name}${idx}`}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+
+            <Select
+              name="categories"
+              defaultValue={0}
+              onChange={editCategorySelect}
+              size="small"
+            >
+              <MenuItem>{editBook.categories.mame}</MenuItem>
+              {category?.map((item, idx) => (
+                <MenuItem value={item.id} key={`${item.name}${idx}`}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+
+          <Box className="addBox">
+            <Button variant="contained" color="success" onClick={sendToBook}>
+              CHANGE
+            </Button>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+
+      <table>
+        <thead>
+          <tr>
+            {tr.map((item, idx) => (
+              <th key={`${item}${idx} `}>{item}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {books.map((item, idx) => (
+            
+            <tr key={`${item}${idx}`}>
+
+              <td className="cursor-icon">
+                <ModeEditIcon
+                  onClick={() => {
+                    handleEditBtn(item);
+                  }}
+                />
+              </td>
+
+              <td>{item.name}-{item.publicationYear}-{item.stock}</td>
+
+              <td>{item.author.name}-{item.author.birthDate}-{item.author.country}</td>
+
+              <td>{item.categories[0].name}-{item.categories[0].description}</td>
+
+              <td>{item.publisher.name}-{item.publisher.establishmentYear}</td>
+              
+              <td>
+                <DeleteIcon
+                  className="cursor-icon"
+                  onClick={() => {
+                    removeBook(item);
+                  }}
+                />
+              </td>
+            </tr>
+
+          ))}
+        </tbody>
+      </table>
     </div>
+
+  
   );
 }
 

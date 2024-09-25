@@ -30,12 +30,12 @@ function Yayımcı() {
   } = useContext(BookContext);
   const tr = ["Edit", "Name", "EstablishmentYear", "Address", "Delete"];
 
-  //Get to Publisher
+  //Get to Publishers
   useEffect(() => {
     getPublisher();
   }, [update]);
 
-  //Add New Publisher İnput
+  //Add New Publisher İnput value
   const newPublisherİnp = (e) => {
     const { name, value } = e.target;
     setNewPublisher({
@@ -44,7 +44,6 @@ function Yayımcı() {
     });
     setUpdate(false);
   };
-
   //Add New Publisher post
   const sendToPublisher = () => {
     axios
@@ -70,7 +69,7 @@ function Yayımcı() {
       });
   };
 
-  //RemovePublisher
+  //Remove Publisher
   const removePublisher = (item) => {
     axios
       .delete(
@@ -86,7 +85,7 @@ function Yayımcı() {
       });
   };
 
-  //EditPublisher
+  //Edit Publisher
   const sendEditPublisherİnp = () => {
     console.log(editPublisher);
     axios
@@ -107,6 +106,7 @@ function Yayımcı() {
       });
   };
 
+  //Edit Publisher İnp Value
   const editPublisherİnp = (e) => {
     const { name, value } = e.target;
     setEditPublisher((prev) => ({
@@ -115,12 +115,14 @@ function Yayımcı() {
     }));
     console.log(editPublisher);
   };
-
+  //Edit Publisher Button 
   const handleEditBtn = (item) => {
     setEditPublisher(item);
   };
 
-  console.log(typeof publisher)
+
+   
+ 
 
   return (
     <div className="yayimci">
@@ -134,7 +136,7 @@ function Yayımcı() {
         >
           <Typography>ADD NEW PUBLİSHER</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails >
           <Box
             component="form"
             sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
@@ -171,8 +173,6 @@ function Yayımcı() {
               name="address"
               size="small"
             />
-          </Box>
-          <div>
             <Button
               variant="contained"
               color="success"
@@ -180,7 +180,10 @@ function Yayımcı() {
             >
               ADD
             </Button>
-          </div>
+          </Box>
+          
+            
+          
         </AccordionDetails>
       </Accordion>
 
@@ -229,9 +232,7 @@ function Yayımcı() {
               name="address"
               size="small"
             />
-          </Box>
-          <div>
-            <Button
+             <Button
               variant="contained"
               color="success"
               onClick={(e) => {
@@ -240,7 +241,10 @@ function Yayımcı() {
             >
               CHANGE PUBLİSHER
             </Button>
-          </div>
+          </Box>
+         
+           
+        
         </AccordionDetails>
       </Accordion>
 

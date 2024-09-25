@@ -8,7 +8,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100wh;
 }
 a {
   text-decoration: none;
@@ -24,8 +23,9 @@ li {
   align-items: center;
   justify-content: space-between;
   height: 50px;
-  background-color: #4B5043;
+  background-color: #4b5043;
   color: white;
+ 
 }
 
 .navbar .logo {
@@ -55,14 +55,14 @@ li {
 }
 
 /*Addİtem Components */
-.addİtem{
+.addİtem {
   width: 80%;
-  display: block;
-  
-  
 }
-
-
+.addİtem .input-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 
 /* Table */
 table {
@@ -98,8 +98,52 @@ table:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-.cursor-icon{
+.cursor-icon {
   cursor: pointer;
+}
+
+/* Footer */
+.footer {
+  background-color: #4b5043;
+  color: white;
+  padding: 5px 0;
+  text-align: center;
+  bottom: 0;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 5px;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 50px;
+  margin: 10px;
+}
+
+.footer-section h4 {
+  margin-bottom: 10px;
+}
+.footer-section ul {
+  list-style-type: none;
+}
+
+.footer-section a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  background-color: #222;
+  padding: 10px 0;
+  margin-top: 20px;
 }
 
 /*

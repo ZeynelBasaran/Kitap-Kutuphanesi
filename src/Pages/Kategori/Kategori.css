@@ -5,7 +5,7 @@
 }
 .kategori .addİtem{
     width: 92%;
-    margin: 20px 0;
+    margin: 10px 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .kategori .addİtem:hover {
@@ -14,9 +14,12 @@
 .kategori table{
     width: 92%;
 }
-th:nth-child(3),
-td:nth-child(3){
-  width: 7%; /* İkinci sütunu daha dar yap */
+
+.kategori th:nth-child(4),
+.kategori td:nth-child(4),
+.kategori th:nth-child(1),
+.kategori td:nth-child(1){
+  width: 1%;
   text-align: center; /* Ortalamak için */
   padding: 5px;
 }
