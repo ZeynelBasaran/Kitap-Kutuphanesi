@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Anasayfa() {
   return (
-    <section className="hero">
+    <section className="anasayfa">
       <div className="hero-content">
         <h1>
           Açık Kütüphaneye <br /> Hoşgeldiniz!

@@ -1,18 +1,18 @@
-.hero {
+.anasayfa {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   background: url(public/1.jpg);
   background-size: cover; /* Görselin tam ekranı kaplamasını sağlar */
   background-position: center; /* Görseli ortalar */
   background-repeat: no-repeat;
-  height: 1200px;
+  margin-top: 70px;
+  height: 100%;
 }
 
 .hero-content {
   text-align: center;
   color: #4B5043;
+  margin:200px 0;
 }
 
 .hero h1 {

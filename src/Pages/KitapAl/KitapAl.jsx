@@ -53,6 +53,14 @@ function KitapAlma() {
     getCategory();
     getBooks();
     getBorrow();
+
+    const timer = setTimeout(() => {
+      setAlerts({
+        type: "",
+        message: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
   }, [update]);
 
   //Send to new Borrow Database
@@ -95,9 +103,17 @@ function KitapAlma() {
           },
         });
         setUpdate(false);
+        setAlerts({
+          type: "success",
+          message: "Borrow Added Successfully",
+        });
       })
-      .catch((error) => {
-        console.error("Bir hata oluştu:", error);
+      .catch(() => {
+        setAlerts({
+          type: "error",
+          message: "Borrow not added",
+        });
+        setUpdate(false);
       });
   };
 
@@ -126,8 +142,14 @@ function KitapAlma() {
       .then(() => {
         setBorrow((prev) => prev.filter((items) => items.id !== item.id));
         setAlerts({
+          type: "warning",
+          message: "Borrow successfully deleted",
+        });
+        setUpdate(false);
+      }).catch(()=>{
+        setAlerts({
           type: "error",
-          message: "Publisher successfully deleted",
+          message: "Borrow not deleted",
         });
         setUpdate(false);
       });
@@ -174,7 +196,17 @@ function KitapAlma() {
           },
         });
         setUpdate(false);
-      });
+        setAlerts({
+          type: "info",
+          message: "Borrow successfully change",
+        });
+      }).catch(() => {
+        setAlerts({
+          type: "error",
+          message: "Borrow not added",
+        });
+        setUpdate(false);
+      });;
   };
 
   //Edit Publisher İnput ve select value

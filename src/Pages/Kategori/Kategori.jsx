@@ -27,13 +27,21 @@ function Kategori() {
     getCategory,
     editCategory,
     setEditCategory,
-    alerts
+    alerts,
+    setAlerts
   } = useContext(BookContext);
   const tr = ["Edit","Name", "Description", "Delete"];
   
   //Get to Category
   useEffect(() => {
     getCategory();
+    const timer = setTimeout(() => {
+      setAlerts({
+        type: "",
+        message: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
   }, [update]);
 
   //Add New Publisher post
@@ -50,10 +58,18 @@ function Kategori() {
           description: "",
         });
         setUpdate(false);
-      })
-      .catch((error) => {
-        console.error("Bir hata oluştu:", error);
+        setAlerts({
+          type: "success",
+          message: "Category Added Successfully",
+        });
+      }).catch(() => {
+        setAlerts({
+          type: "error",
+          message: "Category not added",
+        });
+        setUpdate(false);
       });
+     
   };
   //Add New Publisher İnput value
   const newCategoryİnp = (e) => {
@@ -73,6 +89,16 @@ function Kategori() {
       )
       .then(() => {
         setCategory((prev) => prev.filter((items) => items.id !== item.id));
+        setUpdate(false);
+        setAlerts({
+          type: "warning",
+          message: "Category successfully deleted",
+        });
+      }).catch(()=>{
+        setAlerts({
+          type: "error",
+          message: "Category not deleted",
+        });
         setUpdate(false);
       });
   };
@@ -94,7 +120,16 @@ function Kategori() {
           description: "",
         });
         setUpdate(false);
-        console.log(editCategory)
+        setAlerts({
+          type: "info",
+          message: "Category successfully change",
+        });
+      }).catch(()=> {
+        setAlerts({
+          type: "error",
+          message: `Category information could not be edited`,
+        });
+        setUpdate(false);
       });
   };
 
@@ -183,7 +218,7 @@ function Kategori() {
               required
               id="outlined-required"
               label="Category Name"
-              className=""
+              type="text"
               onChange={editCategoryİnp}
               value={editCategory.name}
               name="name"
@@ -193,7 +228,7 @@ function Kategori() {
               required
               id="outlined-required"
               label="Description"
-              className=""
+              type="text"
               onChange={editCategoryİnp}
               value={editCategory.description}
               name="description"

@@ -1,25 +1,35 @@
-.kitap{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.kitap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  margin-top: 70px;
 }
-.kitap .addİtem{
-    width: 92%;
-    margin: 10px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.kitap .addİtem {
+  width: 92%;
+  margin: 10px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .kitap .addİtem:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  }
-.kitap table{
-    width: 92%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
-.addBox{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
+.kitap table {
+  width: 92%;
 }
-.selectBox{
-    margin-top: 20px;
+.addBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+.selectBox {
+  margin-top: 20px;
+}
+.kitap th:nth-child(6),
+.kitap td:nth-child(6),
+.kitap th:nth-child(1),
+.kitap td:nth-child(1) {
+  width: 1%;
+  text-align: center; /* Ortalamak için */
+  padding: 5px;
 }

@@ -25,12 +25,19 @@ function Yazar() {
     setUpdate,
     editAuthor,
     setEditAuthor,
-    alerts
+    alerts,setAlerts
   } = useContext(BookContext);
   const tr = ["Edit", "Name", "BirthDate", "Country", "Delete"];
 
   useEffect(() => {
     getAuthor();
+    const timer = setTimeout(() => {
+      setAlerts({
+        type: "",
+        message: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
   }, [update]);
 
   const newAuthorİnp = (e) => {
@@ -40,16 +47,6 @@ function Yazar() {
       [name]: value,
     });
     setUpdate(false);
-  };
-
-  //Remove Author
-  const removeAuthor = (item) => {
-    axios
-      .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors/${item.id}`)
-      .then(() => {
-        setAuthor((prev) => prev.filter((items) => items.id !== item.id));
-        setUpdate(false);
-      });
   };
 
   const sendToAuthor = () => {
@@ -63,11 +60,39 @@ function Yazar() {
           country: "",
         });
         setUpdate(false);
+        setAlerts({
+          type: "success",
+          message: "Author Added Successfully",
+        });
       })
-      .catch((error) => {
-        console.error("Bir hata oluştu:", error);
+      .catch(() => {
+        setAlerts({
+          type: "error",
+          message: "Author not added",
+        });
+        setUpdate(false);
       });
   };
+
+  //Remove Author
+  const removeAuthor = (item) => {
+    axios
+      .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors/${item.id}`)
+      .then(() => {
+        setAuthor((prev) => prev.filter((items) => items.id !== item.id));
+        setUpdate(false);
+        setAlerts({
+          type: "warning",
+          message: "Author successfully deleted",
+        });
+      }).catch(()=>{
+        setAlerts({
+          type: "error",
+          message: "Author not deleted",
+        });
+        setUpdate(false);
+      });
+  }
 
   //Edit Author
   const sendEditAuthorİnp = () => {
@@ -82,6 +107,16 @@ function Yazar() {
           name: "",
           birthDate: "",
           country: "",
+        });
+        setUpdate(false);
+        setAlerts({
+          type: "info",
+          message: "Author successfully change",
+        });
+      }).catch(()=>{
+        setAlerts({
+          type: "error",
+          message: "Author not deleted",
         });
         setUpdate(false);
       });

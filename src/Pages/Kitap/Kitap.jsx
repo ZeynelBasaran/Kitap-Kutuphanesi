@@ -40,6 +40,7 @@ function Kitap() {
     editBook,
     setEditBook,
     alerts,
+    
   } = useContext(BookContext);
   const tr = [
     "Edit",
@@ -56,6 +57,14 @@ function Kitap() {
     getPublisher();
     getCategory();
     getBooks();
+
+    const timer = setTimeout(() => {
+      setAlerts({
+        type: "",
+        message: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
   }, [update]);
 
   //Send to new Book Database
@@ -71,9 +80,16 @@ function Kitap() {
           address: "",
         });
         setUpdate(false);
-      })
-      .catch((error) => {
-        console.error("Bir hata oluştu:", error);
+        setAlerts({
+          type: "success",
+          message: "Book Added Successfully",
+        });
+      }).catch(() => {
+        setAlerts({
+          type: "error",
+          message: "Book not added",
+        });
+        setUpdate(false);
       });
   };
 
@@ -117,8 +133,14 @@ function Kitap() {
       .then(() => {
         setBooks((prev) => prev.filter((items) => items.id !== item.id));
         setAlerts({
+          type: "warning",
+          message: "Book successfully deleted",
+        });
+        setUpdate(false);
+      }).catch(()=>{
+        setAlerts({
           type: "error",
-          message: "Publisher successfully deleted",
+          message: "Book not deleted",
         });
         setUpdate(false);
       });
@@ -126,7 +148,6 @@ function Kitap() {
 
   //Edit Book
   const sendEditBookİnp = () => {
-    console.log(editBook);
     axios
       .put(
         `${import.meta.env.VITE_APP_BASE_URL}/api/v1/books/${editBook.id}`,
@@ -159,7 +180,17 @@ function Kitap() {
           ],
         });
         setUpdate(false);
-      });
+        setAlerts({
+          type: "info",
+          message: "Book successfully change",
+        });
+      }).catch((error)=> {
+        console.log(error)
+        setAlerts({
+          type: "warning",
+          message: `Book information could not be edited`,
+        });
+      })
   };
 
   //Edit Book İnput and select value
@@ -175,6 +206,7 @@ function Kitap() {
 
   
   const editAuthorSelect = (e) => {
+    setSelectedAuthor(e.target.value);
     const { value } = e.target;
     const selectAuthor = author.find((item) => item.id === value);
     setEditBook((prev) => ({
@@ -182,16 +214,9 @@ function Kitap() {
       author: selectAuthor,
     }));
   };
-  /*
-  const editCategoriesSelect = (e) => {
-    const { value } = e.target;
-    const selectCategory = category.find((item) => item.id === value);
-    setEditBook((prev) => ({
-      ...prev,
-      categories: [selectCategory],
-    }));
-  };
+
   const editPublisherSelect = (e) => {
+    setSelectedPublisher(e.target.value);
     const { value } = e.target;
     const selectPublisher = publisher.find((item) => item.id === value);
     setEditBook((prev) => ({
@@ -200,8 +225,17 @@ function Kitap() {
     }));
     console.log(editBook)
   };
- 
-*/
+
+  const editCategoriesSelect = (e) => {
+    setSelectedCategories(e.target.value);
+    const { value } = e.target;
+    const selectCategory = category.find((item) => item.id === value);
+    setEditBook((prev) => ({
+      ...prev,
+      categories: [selectCategory],
+    }));
+  };
+  
   //Edit Book Button
   const handleEditBtn = (item) => {
     setEditBook(item);
@@ -401,7 +435,7 @@ function Kitap() {
 
             <Select
               name="publisher"
-              
+              onChange={editPublisherSelect}
               size="small"
               value={selectedPublisher}
             >
@@ -416,7 +450,7 @@ function Kitap() {
 
             <Select
               name="categories"
-              
+              onChange={editCategoriesSelect}
               size="small"
               value={selectedCategories}
             >

@@ -26,13 +26,21 @@ function Yayımcı() {
     setEditPublisher,
     update,
     setUpdate,
-    getPublisher
+    getPublisher,
   } = useContext(BookContext);
   const tr = ["Edit", "Name", "EstablishmentYear", "Address", "Delete"];
 
   //Get to Publishers
   useEffect(() => {
     getPublisher();
+
+    const timer = setTimeout(() => {
+      setAlerts({
+        type: "",
+        message: "",
+      });
+    }, 3000);
+    return () => clearTimeout(timer);
   }, [update]);
 
   //Add New Publisher İnput value
@@ -51,8 +59,7 @@ function Yayımcı() {
         `${import.meta.env.VITE_APP_BASE_URL}/api/v1/publishers`,
         newPublisher
       )
-      .then((response) => {
-        console.log("Veri başarıyla gönderildi:", response.data);
+      .then(() => {
         setNewPublisher({
           name: "",
           establishmentYear: "",
@@ -64,8 +71,12 @@ function Yayımcı() {
         });
         setUpdate(false);
       })
-      .catch((error) => {
-        console.error("Bir hata oluştu:", error);
+      .catch(() => {
+        setAlerts({
+          type: "error",
+          message: "Publisher not added",
+        });
+        setUpdate(false);
       });
   };
 
@@ -78,10 +89,16 @@ function Yayımcı() {
       .then(() => {
         setPublisher((prev) => prev.filter((items) => items.id !== item.id));
         setAlerts({
-          type: "error",
+          type: "warning",
           message: "Publisher successfully deleted",
         });
         setUpdate(false);
+      }).catch(()=>{
+        setAlerts({
+          type: "error",
+          message: "Publisher not deleted",
+        });
+        setUpdate(false)
       });
   };
 
@@ -103,6 +120,16 @@ function Yayımcı() {
           address: "",
         });
         setUpdate(false);
+        setAlerts({
+          type: "info",
+          message: "Publisher successfully change",
+        });
+      }).catch(()=> {
+        setAlerts({
+          type: "error",
+          message: `Book information could not be edited`,
+        });
+        setUpdate(false);
       });
   };
 
@@ -115,14 +142,10 @@ function Yayımcı() {
     }));
     console.log(editPublisher);
   };
-  //Edit Publisher Button 
+  //Edit Publisher Button
   const handleEditBtn = (item) => {
     setEditPublisher(item);
   };
-
-
-   
- 
 
   return (
     <div className="yayimci">
@@ -136,7 +159,7 @@ function Yayımcı() {
         >
           <Typography>ADD NEW PUBLİSHER</Typography>
         </AccordionSummary>
-        <AccordionDetails >
+        <AccordionDetails>
           <Box
             component="form"
             sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
@@ -148,11 +171,11 @@ function Yayımcı() {
               required
               id="outlined-required"
               label="Publisher Name"
-              className=""
               onChange={newPublisherİnp}
               value={newPublisher.name}
               name="name"
               size="small"
+              type="text"
             />
             <TextField
               required
@@ -172,6 +195,7 @@ function Yayımcı() {
               value={newPublisher.address}
               name="address"
               size="small"
+              type="text"
             />
             <Button
               variant="contained"
@@ -181,9 +205,6 @@ function Yayımcı() {
               ADD
             </Button>
           </Box>
-          
-            
-          
         </AccordionDetails>
       </Accordion>
 
@@ -232,7 +253,7 @@ function Yayımcı() {
               name="address"
               size="small"
             />
-             <Button
+            <Button
               variant="contained"
               color="success"
               onClick={(e) => {
@@ -242,9 +263,6 @@ function Yayımcı() {
               CHANGE PUBLİSHER
             </Button>
           </Box>
-         
-           
-        
         </AccordionDetails>
       </Accordion>
 
