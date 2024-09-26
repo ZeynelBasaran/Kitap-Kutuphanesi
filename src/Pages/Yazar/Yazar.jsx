@@ -163,7 +163,7 @@ function Yazar() {
           aria-controls="panel2-content"
           id="panel2-header"
         >
-          <Typography>EDİT TO AUTHOR</Typography>
+          <Typography>EDİT AUTHOR</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box

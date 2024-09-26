@@ -4,7 +4,7 @@ import Yayımcı from "../Pages/Yayımcı/Yayımcı.jsx";
 import Kategori from "../Pages/Kategori/Kategori.jsx";
 import Kitap from "../Pages/Kitap/Kitap.jsx";
 import Yazar from "../Pages/Yazar/Yazar.jsx";
-import KitapAlma from "../Pages/KitapAlma/KitapAlma.jsx";
+import KitapAlma from "../Pages/KitapAl/KitapAl.jsx";
 import Anasayfa from "../Pages/Anasayfa/Anasayfa.jsx";
 
 function Hero() {

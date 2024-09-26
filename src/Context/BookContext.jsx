@@ -4,9 +4,11 @@ const BookContext = createContext();
 axios;
 
 function BookContextComp({ children }) {
-
-  //
   const [update, setUpdate] = useState(false);
+  const [alerts, setAlerts] = useState({
+    type: "",
+    message: "",
+  });
 
   //Publisher States
   const [publisher, setPublisher] = useState([]);
@@ -16,12 +18,11 @@ function BookContextComp({ children }) {
     address: "",
   });
   const [editPublisher, setEditPublisher] = useState({
-    id:"",
+    id: "",
     name: "",
     establishmentYear: "",
     address: "",
   });
-
 
   //Category States
   const [category, setCategory] = useState([]);
@@ -30,12 +31,10 @@ function BookContextComp({ children }) {
     description: "",
   });
   const [editCategory, setEditCategory] = useState({
-    id:"",
+    id: "",
     name: "",
     description: "",
   });
-
-
 
   //Books States
   const [books, setBooks] = useState([]);
@@ -48,21 +47,21 @@ function BookContextComp({ children }) {
       id: 0,
       name: "",
       birthDate: "",
-      country: ""
+      country: "",
     },
     publisher: {
       id: 0,
       name: "",
       establishmentYear: 0,
-      address: ""
+      address: "",
     },
     categories: [
       {
         id: 0,
         name: "",
-        description: ""
-      }
-    ]
+        description: "",
+      },
+    ],
   });
   const [editBook, setEditBook] = useState({
     id: 0,
@@ -73,23 +72,22 @@ function BookContextComp({ children }) {
       id: 0,
       name: "",
       birthDate: "",
-      country: ""
+      country: "",
     },
     publisher: {
       id: 0,
       name: "",
       establishmentYear: 0,
-      address: ""
+      address: "",
     },
     categories: [
       {
         id: 0,
         name: "",
-        description: ""
-      }
-    ]
+        description: "",
+      },
+    ],
   });
-
 
   //Author States
   const [author, setAuthor] = useState([]);
@@ -99,19 +97,80 @@ function BookContextComp({ children }) {
     country: "",
   });
   const [editAuthor, setEditAuthor] = useState({
-    id:"",
+    id: "",
     name: "",
     birthDate: "",
     country: "",
   });
 
-
-  const [alerts, setAlerts] = useState({
-    type: "",
-    message: "",
+  //Author States
+  const [borrow, setBorrow] = useState([]);
+  const [newBorrow, setNewBorrow] = useState({
+    id: "0",
+    borrowerName: "",
+    borrowerMail: "",
+    borrowingDate: "",
+    returnDate: "",
+    book: {
+      id: 0,
+      name: "",
+      publicationYear: 0,
+      stock: 0,
+      author: {
+        id: 0,
+        name: "",
+        birthDate: "",
+        country: "",
+      },
+      publisher: {
+        id: 0,
+        name: "",
+        establishmentYear: 0,
+        address: "",
+      },
+      categories: [
+        {
+          id: 0,
+          name: "",
+          description: "",
+        },
+      ],
+    },
+  });
+  const [editBorrow, setEditBorrow] = useState({
+    id: "0",
+    borrowerName: "",
+    borrowerMail: "",
+    borrowingDate: "",
+    returnDate: "",
+    book: {
+      id: 0,
+      name: "",
+      publicationYear: 0,
+      stock: 0,
+      author: {
+        id: 0,
+        name: "",
+        birthDate: "",
+        country: "",
+      },
+      publisher: {
+        id: 0,
+        name: "",
+        establishmentYear: 0,
+        address: "",
+      },
+      categories: [
+        {
+          id: 0,
+          name: "",
+          description: "",
+        },
+      ],
+    },
   });
 
-//Get Datebase
+  //Get Datebase
   const getPublisher = async () => {
     try {
       const response = await axios.get(
@@ -171,6 +230,21 @@ function BookContextComp({ children }) {
     }
   };
 
+  const getBorrow = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_APP_BASE_URL}/api/v1/borrows`
+      );
+      setBorrow(response.data);
+      setUpdate(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      //console.log("Borrows Yüklendi.",borrow);
+    }
+  };
+
+  
 
   return (
     <BookContext.Provider
@@ -206,7 +280,14 @@ function BookContextComp({ children }) {
         editAuthor,
         setEditAuthor,
         setEditBook,
-        editBook
+        editBook,
+        borrow,
+        newBorrow,
+        setEditBorrow,
+        editBorrow,
+        setNewBorrow,
+        setBorrow,
+        getBorrow,
       }}
     >
       {children}
