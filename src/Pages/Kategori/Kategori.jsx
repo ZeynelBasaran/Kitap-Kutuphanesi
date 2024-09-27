@@ -11,8 +11,6 @@ import Typography from "@mui/material/Typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Alerts from "../../Components/Alert";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
-import "./kategori.css";
-
 import axios from "axios";
 
 function Kategori() {
