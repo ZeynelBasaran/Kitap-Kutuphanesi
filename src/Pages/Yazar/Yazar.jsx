@@ -24,10 +24,14 @@ function Yazar() {
     setUpdate,
     editAuthor,
     setEditAuthor,
-    alerts,setAlerts
+    alerts,
+    setAlerts,
+    editing,
+    setEditing,
   } = useContext(BookContext);
   const tr = ["Edit", "Name", "BirthDate", "Country", "Delete"];
 
+  //Fetches authors when the page loads or 'update' changes.
   useEffect(() => {
     getAuthor();
     const timer = setTimeout(() => {
@@ -39,6 +43,7 @@ function Yazar() {
     return () => clearTimeout(timer);
   }, [update]);
 
+  //Captures input changes (gets the name and value).
   const newAuthorİnp = (e) => {
     const { name, value } = e.target;
     setNewAuthor({
@@ -48,6 +53,7 @@ function Yazar() {
     setUpdate(false);
   };
 
+  // Sends the new category data via POST request to the API.
   const sendToAuthor = () => {
     axios
       .post(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors`, newAuthor)
@@ -73,7 +79,7 @@ function Yazar() {
       });
   };
 
-  //Remove Author
+  // Deletes the specified author from the API.
   const removeAuthor = (item) => {
     axios
       .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/authors/${item.id}`)
@@ -84,16 +90,17 @@ function Yazar() {
           type: "warning",
           message: "Author successfully deleted",
         });
-      }).catch(()=>{
+      })
+      .catch(() => {
         setAlerts({
           type: "error",
           message: "Author not deleted",
         });
         setUpdate(false);
       });
-  }
+  };
 
-  //Edit Author
+  //Sends the updated author data via PUT request to the API.
   const sendEditAuthorİnp = () => {
     axios
       .put(
@@ -112,7 +119,9 @@ function Yazar() {
           type: "info",
           message: "Author successfully change",
         });
-      }).catch(()=>{
+        setEditing(false);
+      })
+      .catch(() => {
         setAlerts({
           type: "error",
           message: "Author not deleted",
@@ -121,7 +130,7 @@ function Yazar() {
       });
   };
 
-  //Edit Author İnp Value
+   //Captures input changes (gets the name and value).
   const editAuthorİnp = (e) => {
     const { name, value } = e.target;
     setEditAuthor((prev) => ({
@@ -129,9 +138,11 @@ function Yazar() {
       [name]: value,
     }));
   };
-  //Edit Author Button
+
+  //Selects the author to edit and updates the state.
   const handleEditBtn = (item) => {
     setEditAuthor(item);
+    setEditing((prev) => !prev);
   };
 
   return (
@@ -143,7 +154,7 @@ function Yazar() {
           aria-controls="panel2-content"
           id="panel2-header"
         >
-          <Typography>ADD NEW AUTHOR</Typography>
+          <Typography>{editing ? "EDIT AUTHOR" : "ADD NEW AUTHOR"}</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box
@@ -158,83 +169,30 @@ function Yazar() {
               id="outlined-required"
               label="Author Name"
               type="text"
-              onChange={newAuthorİnp}
-              value={newAuthor.name}
+              onChange={editing ? editAuthorİnp : newAuthorİnp}
+              value={editing ? editAuthor.name : newAuthor.name}
               name="name"
               size="small"
             />
 
             <TextField
-            style={{marginTop: '32px'}}
+              style={{ marginTop: "32px" }}
               required
               id="outlined-required"
               helperText="Birth Date"
               type="date"
-              onChange={newAuthorİnp}
-              value={newAuthor.birthDate}
+              onChange={editing ? editAuthorİnp : newAuthorİnp}
+              value={editing ? editAuthor.birthDate : newAuthor.birthDate}
               name="birthDate"
-              size="small"
-            />
-            <TextField
-              required
-              id="outlined-required"
-              label="Country"
-              onChange={newAuthorİnp}
-              value={newAuthor.country}
-              name="country"
-              size="small"
-              type="text"
-            />
-            <Button variant="contained" color="success" onClick={sendToAuthor}>
-              ADD AUTHOR
-            </Button>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
-
-      <Accordion className="addİtem">
-        <AccordionSummary
-          expandIcon={<ArrowDropDownIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          <Typography>EDİT AUTHOR</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box
-            component="form"
-            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-            noValidate
-            autoComplete="on"
-            className="input-box"
-          >
-            <TextField
-              required
-              id="outlined-required"
-              label="Author Name"
-              type="text"
-              onChange={editAuthorİnp}
-              value={editAuthor.name}
-              name="name"
               size="small"
             />
 
             <TextField
               required
               id="outlined-required"
-              label=""
-              type="date"
-              onChange={editAuthorİnp}
-              value={editAuthor.birthDate}
-              name="birthDate"
-              size="small"
-            />
-            <TextField
-              required
-              id="outlined-required"
               label="Country"
-              onChange={editAuthorİnp}
-              value={editAuthor.country}
+              onChange={editing ? editAuthorİnp : newAuthorİnp}
+              value={editing ? editAuthor.country : newAuthor.country}
               name="country"
               size="small"
               type="text"
@@ -242,9 +200,9 @@ function Yazar() {
             <Button
               variant="contained"
               color="success"
-              onClick={sendEditAuthorİnp}
+              onClick={editing ? sendEditAuthorİnp : sendToAuthor}
             >
-              CHANGE AUTHOR
+              {editing ? "CHANGE AUTHOR" : "ADD AUTHOR"}
             </Button>
           </Box>
         </AccordionDetails>
@@ -254,7 +212,7 @@ function Yazar() {
         <thead>
           <tr>
             {tr.map((item, idx) => (
-              <th key={`${item}${idx} `}>{item}</th>
+              <th key={`${item}${idx}`}>{item}</th>
             ))}
           </tr>
         </thead>

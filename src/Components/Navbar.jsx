@@ -12,21 +12,21 @@ function Navbar() {
         </div>
         <ul className="menu1">
           <li>
-            <Link to="/Yayımcı">Yayımcı</Link>
+            <Link to="/Yayımcı">Publisher</Link>
           </li>
           <li>
-            <Link to="/Kategori">Kategori</Link>
+            <Link to="/Kategori">Category</Link>
           </li>
           <li>
-            <Link to="/Kitap">Kitap</Link>
+            <Link to="/Kitap">Book</Link>
           </li>
           <li>
-            <Link to="/Yazar">Yazar</Link>
+            <Link to="/Yazar">Author</Link>
           </li>
         </ul>
         <ul className="menu2">
           <li>
-            <Link to="/KitapAlma">Kitap Al</Link>
+            <Link to="/KitapAlma">Borrowing Book</Link>
           </li>
         </ul>
       </nav>

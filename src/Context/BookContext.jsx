@@ -4,6 +4,7 @@ const BookContext = createContext();
 axios;
 
 function BookContextComp({ children }) {
+  const [editing, setEditing] = useState(false);
   const [update, setUpdate] = useState(false);
   const [alerts, setAlerts] = useState({
     type: "",
@@ -288,6 +289,8 @@ function BookContextComp({ children }) {
         setNewBorrow,
         setBorrow,
         getBorrow,
+        editing,
+        setEditing
       }}
     >
       {children}

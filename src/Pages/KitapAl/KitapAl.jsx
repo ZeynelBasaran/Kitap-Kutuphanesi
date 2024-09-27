@@ -33,6 +33,8 @@ function KitapAlma() {
     setUpdate,
     setAlerts,
     books,
+    editing,
+    setEditing,
   } = useContext(BookContext);
   const tr = [
     "Edit",
@@ -44,7 +46,7 @@ function KitapAlma() {
     "Delete",
   ];
 
-  //Get Database Author,Publisher,Category,Books,Borrow
+  //Fetches authors, publishers, categories, books, and borrow records when the page loads or 'update' changes.
   useEffect(() => {
     getAuthor();
     getPublisher();
@@ -61,7 +63,7 @@ function KitapAlma() {
     return () => clearTimeout(timer);
   }, [update]);
 
-  //Send to new Borrow Database
+  //Sends new borrow record data to the API with a POST request.
   const sendToBorrow = () => {
     console.log("bitti", newBorrow);
     axios
@@ -115,7 +117,7 @@ function KitapAlma() {
       });
   };
 
-  //Add New Borrow İnput and select value
+  //Captures input field changes (name and value).
   const newBorrowİnp = (e) => {
     const { name, value } = e.target;
     setNewBorrow({
@@ -124,6 +126,7 @@ function KitapAlma() {
     });
   };
 
+  //Captures the selected book from the dropdown.
   const booksSelect = (e) => {
     const { value } = e.target;
     const selectAuthor = books.find((item) => item.id === value);
@@ -134,7 +137,8 @@ function KitapAlma() {
     console.log(newBorrow);
   };
 
-  //Remove Borrow
+  // Sends a DELETE request to remove the selected borrow record from the API.
+
   const removeBorrow = (item) => {
     axios
       .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/borrows/${item.id}`)
@@ -155,7 +159,7 @@ function KitapAlma() {
       });
   };
 
-  //Edit Publisher
+  //Sends updated borrow record data to the API via PUT request.
   const sendEditBorrowİnp = () => {
     axios
       .put(
@@ -200,6 +204,7 @@ function KitapAlma() {
           type: "info",
           message: "Borrow successfully change",
         });
+        setEditing(false);
       })
       .catch(() => {
         setAlerts({
@@ -210,53 +215,54 @@ function KitapAlma() {
       });
   };
 
-  //Edit Publisher İnput ve select value
+  //Captures input field changes (name and value).
   const editBorrowİnp = (e) => {
     const { name, value } = e.target;
     setEditBorrow((prev) => ({
       ...prev,
       [name]: value,
     }));
-    console.log(editBorrow)
+    console.log(editBorrow);
   };
-  
-  //Edit Borrow Button
+
+  //Sets the selected borrow record's data in the form fields for editing.
   const handleEditBtn = (item) => {
     setEditBorrow(item);
+    setEditing((prev) => !prev);
   };
 
   return (
-    <>
-      <div className="kitapalma">
-        <Alerts type={alerts.type} message={alerts.message} />
+    <div className="kitapal">
+      <Alerts type={alerts.type} message={alerts.message} />
 
-        <Accordion className="addİtem">
-          <AccordionSummary
-            expandIcon={<ArrowDropDownIcon />}
-            aria-controls="panel2-content"
-            id="panel2-header"
+      <Accordion className="addİtem">
+        <AccordionSummary
+          expandIcon={<ArrowDropDownIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography>{editing ? "EDIT BORROW" : "ADD NEW BORROW"}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="on"
+            className="input-box"
           >
-            <Typography>ADD NEW BORROW</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              component="form"
-              sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-              noValidate
-              autoComplete="on"
-              className="input-box"
-            >
-              <TextField
-                required
-                id="outlined-required"
-                label="Borrower Name"
-                type="text"
-                onChange={newBorrowİnp}
-                value={newBorrow.borrowerName}
-                name="borrowerName"
-                size="small"
-              />
+            <TextField
+              required
+              id="outlined-required"
+              label="Borrower Name"
+              type="text"
+              onChange={editing ? editBorrowİnp : newBorrowİnp}
+              value={editing ? editBorrow.borrowerName : newBorrow.borrowerName}
+              name="borrowerName"
+              size="small"
+            />
 
+            {!editing && (
               <TextField
                 required
                 id="outlined-required"
@@ -267,21 +273,37 @@ function KitapAlma() {
                 name="borrowerMail"
                 size="small"
               />
+            )}
+
+            <TextField
+              style={{ marginTop: "32px" }}
+              required
+              id="outlined-required"
+              helperText="Borrowing Date"
+              onChange={editing ? editBorrowİnp : newBorrowİnp}
+              value={
+                editing ? editBorrow.borrowingDate : newBorrow.borrowingDate
+              }
+              name="borrowingDate"
+              size="small"
+              type="date"
+            />
+
+            {editing && (
               <TextField
-              style={{marginTop: '32px'}}
+                style={{ marginTop: "30px" }}
                 required
                 id="outlined-required"
-                helperText="Borrowing Date"
-                onChange={newBorrowİnp}
-                value={newBorrow.borrowingDate}
-                name="borrowingDate"
+                onChange={editBorrowİnp}
+                name="returnDate"
                 size="small"
                 type="date"
+                helperText="Return Date"
               />
-              
-             
-            </Box>
+            )}
+          </Box>
 
+          {!editing && (
             <Box
               component="form"
               sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
@@ -307,138 +329,58 @@ function KitapAlma() {
                 ))}
               </Select>
             </Box>
+          )}
 
-            <Box className="addBox">
-              <Button
-                variant="contained"
-                color="success"
-                onClick={sendToBorrow}
-              >
-                ADD BORROW
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion className="addİtem">
-          <AccordionSummary
-            expandIcon={<ArrowDropDownIcon />}
-            aria-controls="panel2-content"
-            id="panel2-header"
-          >
-            <Typography>EDİT BORROW</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              component="form"
-              sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-              noValidate
-              autoComplete="on"
-              className="input-box"
+          <Box className="addBox">
+            <Button
+              variant="contained"
+              color="success"
+              onClick={editing ? sendEditBorrowİnp : sendToBorrow}
             >
-              <TextField
-                required
-                id="outlined-required"
-                label="Borrower Name"
-                type="text"
-                onChange={editBorrowİnp}
-                value={editBorrow.borrowerName}
-                name="borrowerName"
-                size="small"
-              />
-              <TextField
-              style={{marginTop: '30px'}}
-                required
-                id="outlined-required"
-                helperText="Borrowing Date"
-                onChange={editBorrowİnp}
-                value={editBorrow.borrowingDate}
-                name="borrowingDate"
-                size="small"
-                type="date"
-              />
-              <TextField
-              style={{marginTop: '30px'}}
-                required
-                id="outlined-required"
-                onChange={editBorrowİnp}
-                name="returnDate"
-                size="small"
-                type="date"
-                helperText="Return Date"
-              />
-            </Box>
+              {editing ? "CHANGE BORROW" : "ADD BORROW"}
+            </Button>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
 
-            <Box className="addBox">
-              <Button
-                variant="contained"
-                color="success"
-                onClick={sendEditBorrowİnp}
-              >
-                CHANGE BORROW
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-
-        <table>
-          <thead>
-            <tr>
-              {tr.map((item, idx) => (
-                <th key={`${item}${idx} `}>{item}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {borrow?.map((item, idx) => (
-              <tr key={`${item}${idx}`}>
-                <td className="cursor-icon">
-                  <ModeEditIcon
-                    onClick={() => {
-                      handleEditBtn(item);
-                    }}
-                  />
-                </td>
-                <td>{item.borrowerName}</td>
-
-                <td>{item.borrowerMail}</td>
-
-                <td>{item.borrowingDate}</td>
-
-                <td>{item.returnDate}</td>
-                <td>{`${item.book.name} (${item.book.publicationYear})`}</td>
-
-                <td>
-                  <DeleteIcon
-                    className="cursor-icon"
-                    onClick={() => {
-                      removeBorrow(item);
-                    }}
-                  />
-                </td>
-              </tr>
+      <table>
+        <thead>
+          <tr>
+            {tr.map((item, idx) => (
+              <th key={`${item}${idx} `}>{item}</th>
             ))}
-          </tbody>
-        </table>
-      </div>
-    </>
+          </tr>
+        </thead>
+        <tbody>
+          {borrow?.map((item, idx) => (
+            <tr key={`${item}${idx}`}>
+              <td className="cursor-icon">
+                <ModeEditIcon
+                  onClick={() => {
+                    handleEditBtn(item);
+                  }}
+                />
+              </td>
+              <td>{item.borrowerName}</td>
+              <td>{item.borrowerMail}</td>
+              <td>{item.borrowingDate}</td>
+              <td>{item.returnDate}</td>
+              <td>{`${item.book.name} (${item.book.publicationYear})`}</td>
+              <td>
+                <DeleteIcon
+                  className="cursor-icon"
+                  onClick={() => {
+                    removeBorrow(item);
+                  }}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
 export default KitapAlma;
 
-/*
- <TextField
-                required
-                id="outlined-required"
-                label="Return Date"
-                onChange={newBorrowİnp}
-                value={newBorrow.returnDate}
-                name="returnDate"
-                size="small"
-                type="date"
-              />
-
-
-
-              */

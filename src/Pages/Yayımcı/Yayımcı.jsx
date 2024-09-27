@@ -4,7 +4,6 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import "./yayimci.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -14,7 +13,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Alerts from "../../Components/Alert";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
+
 function Yayımcı() {
+  
   const {
     publisher,
     setPublisher,
@@ -27,10 +28,12 @@ function Yayımcı() {
     update,
     setUpdate,
     getPublisher,
+    editing,
+    setEditing
   } = useContext(BookContext);
   const tr = ["Edit", "Name", "EstablishmentYear", "Address", "Delete"];
 
-  //Get to Publishers
+  //Fetches publishers when the page loads or 'update' changes.
   useEffect(() => {
     getPublisher();
 
@@ -43,7 +46,7 @@ function Yayımcı() {
     return () => clearTimeout(timer);
   }, [update]);
 
-  //Add New Publisher İnput value
+  //Captures input changes (gets the name and value).
   const newPublisherİnp = (e) => {
     const { name, value } = e.target;
     setNewPublisher({
@@ -52,7 +55,8 @@ function Yayımcı() {
     });
     setUpdate(false);
   };
-  //Add New Publisher post
+
+  // Sends the new publisher data via POST request to the API.
   const sendToPublisher = () => {
     axios
       .post(
@@ -80,7 +84,7 @@ function Yayımcı() {
       });
   };
 
-  //Remove Publisher
+  // Deletes the specified publisher from the API.
   const removePublisher = (item) => {
     axios
       .delete(
@@ -93,16 +97,17 @@ function Yayımcı() {
           message: "Publisher successfully deleted",
         });
         setUpdate(false);
-      }).catch(()=>{
+      })
+      .catch(() => {
         setAlerts({
           type: "error",
           message: "Publisher not deleted",
         });
-        setUpdate(false)
+        setUpdate(false);
       });
   };
 
-  //Edit Publisher
+  //Sends the updated publisher data via PUT request to the API.
   const sendEditPublisherİnp = () => {
     console.log(editPublisher);
     axios
@@ -124,7 +129,9 @@ function Yayımcı() {
           type: "info",
           message: "Publisher successfully change",
         });
-      }).catch(()=> {
+        setEditing(false)
+      })
+      .catch(() => {
         setAlerts({
           type: "error",
           message: `Book information could not be edited`,
@@ -133,22 +140,120 @@ function Yayımcı() {
       });
   };
 
-  //Edit Publisher İnp Value
+  //Captures input changes (gets the name and value).
   const editPublisherİnp = (e) => {
     const { name, value } = e.target;
     setEditPublisher((prev) => ({
       ...prev,
       [name]: value,
     }));
-    console.log(editPublisher);
+    
   };
-  //Edit Publisher Button
+  //Selects the publisher to edit and updates the state.
   const handleEditBtn = (item) => {
     setEditPublisher(item);
+    setEditing((prev)=> !prev)
   };
 
   return (
-    <div className="yayimci">
+      <div className="yayimci">
+        <Alerts type={alerts.type} message={alerts.message} />
+    
+        <Accordion className="addİtem">
+          <AccordionSummary
+            expandIcon={<ArrowDropDownIcon />}
+            aria-controls="panel2-content"
+            id="panel2-header"
+          >
+            <Typography>{editing ? "EDIT PUBLISHER" : "ADD NEW PUBLISHER"}</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              component="form"
+              sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+              noValidate
+              autoComplete="on"
+              className="input-box"
+            >
+              <TextField
+                required
+                id="outlined-required"
+                label="Publisher Name"
+                onChange={editing ? editPublisherİnp : newPublisherİnp}
+                value={editing ? editPublisher.name : newPublisher.name}
+                name="name"
+                size="small"
+                type="text"
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Establishment Year"
+                type="number"
+                onChange={editing ? editPublisherİnp : newPublisherİnp}
+                value={editing ? editPublisher.establishmentYear : newPublisher.establishmentYear}
+                name="establishmentYear"
+                size="small"
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Address"
+                onChange={editing ? editPublisherİnp : newPublisherİnp}
+                value={editing ? editPublisher.address : newPublisher.address}
+                name="address"
+                size="small"
+                type="text"
+              />
+              <Button
+                variant="contained"
+                color="success"
+                onClick={editing ? sendEditPublisherİnp : sendToPublisher}
+              >
+                {editing ? "CHANGE PUBLISHER" : "ADD"}
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+    
+        <table>
+          <thead>
+            <tr>
+              {tr.map((item, idx) => (
+                <th key={`${item}${idx}`}>{item}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {publisher.map((item, idx) => (
+              <tr key={`${item}${idx}`}>
+                <td className="cursor-icon">
+                  <ModeEditIcon onClick={() => handleEditBtn(item)} />
+                </td>
+                <td>{item.name}</td>
+                <td>{item.establishmentYear}</td>
+                <td>{item.address}</td>
+                <td>
+                  <DeleteIcon
+                    className="cursor-icon"
+                    onClick={() => removePublisher(item)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    
+    
+  );
+}
+
+export default Yayımcı;
+
+
+/*
+  <div className="yayimci">
       <Alerts type={alerts.type} message={alerts.message} />
 
       <Accordion className="addİtem">
@@ -207,64 +312,65 @@ function Yayımcı() {
           </Box>
         </AccordionDetails>
       </Accordion>
-
-      <Accordion className="addİtem">
-        <AccordionSummary
-          expandIcon={<ArrowDropDownIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          <Typography>EDİT PUBLİSHER</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Box
-            component="form"
-            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-            noValidate
-            autoComplete="on"
-            className="input-box"
+      {editing && (
+        <Accordion className="addİtem">
+          <AccordionSummary
+            expandIcon={<ArrowDropDownIcon />}
+            aria-controls="panel2-content"
+            id="panel2-header"
           >
-            <TextField
-              required
-              id="outlined-required"
-              label="Publisher Name"
-              className=""
-              onChange={editPublisherİnp}
-              value={editPublisher.name}
-              name="name"
-              size="small"
-            />
-            <TextField
-              required
-              id="outlined-required"
-              label="Establishment Year"
-              type="number"
-              onChange={editPublisherİnp}
-              value={editPublisher.establishmentYear}
-              name="establishmentYear"
-              size="small"
-            />
-            <TextField
-              required
-              id="outlined-required"
-              label="Address"
-              onChange={editPublisherİnp}
-              value={editPublisher.address}
-              name="address"
-              size="small"
-            />
-            <Button
-              variant="contained"
-              color="success"
-              onClick={(e) => {
-                sendEditPublisherİnp(e);
-              }}
+            <Typography>EDİT PUBLİSHER</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Box
+              component="form"
+              sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+              noValidate
+              autoComplete="on"
+              className="input-box"
             >
-              CHANGE PUBLİSHER
-            </Button>
-          </Box>
-        </AccordionDetails>
-      </Accordion>
+              <TextField
+                required
+                id="outlined-required"
+                label="Publisher Name"
+                className=""
+                onChange={editPublisherİnp}
+                value={editPublisher.name}
+                name="name"
+                size="small"
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Establishment Year"
+                type="number"
+                onChange={editPublisherİnp}
+                value={editPublisher.establishmentYear}
+                name="establishmentYear"
+                size="small"
+              />
+              <TextField
+                required
+                id="outlined-required"
+                label="Address"
+                onChange={editPublisherİnp}
+                value={editPublisher.address}
+                name="address"
+                size="small"
+              />
+              <Button
+                variant="contained"
+                color="success"
+                onClick={(e) => {
+                  sendEditPublisherİnp(e);
+                }}
+              >
+                CHANGE PUBLİSHER
+              </Button>
+            </Box>
+          </AccordionDetails>
+        </Accordion>
+      )}
 
       <table>
         <thead>
@@ -300,13 +406,5 @@ function Yayımcı() {
         </tbody>
       </table>
     </div>
-  );
-}
-
-export default Yayımcı;
-
-/*
-
-
 
 */

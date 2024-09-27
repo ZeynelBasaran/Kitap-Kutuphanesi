@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 
 function Footer() {
@@ -7,32 +7,32 @@ function Footer() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-section">
-            <h4>Hakkımızda</h4>
-            <p>Biz, mükemmeliyeti hedefleyen bir ekibiz.</p>
+            <h4>About Us</h4>
+            <p>We are a team that aims for excellence..</p>
           </div>
           <div className="footer-section">
-            <h4>İletişim</h4>
+            <h4>Contact</h4>
             <p>Email: zeynelbasaran@hotmail.com</p>
             <p>Telefon: (534) 847 74 71</p>
           </div>
           <div className="footer-section">
-            <h4>Bağlantılar</h4>
+            <h4>Links</h4>
             <ul>
               <li>
-                <Link to="/Yayımcı">Yayımcı</Link>
+                <Link to="/Yayımcı">Publisher</Link>
               </li>
               <li>
-                <Link to="/Kategori">Kategori</Link>
+                <Link to="/Kategori">Category</Link>
               </li>
               <li>
-                <Link to="/Kitap">Kitap</Link>
+                <Link to="/Kitap">Book</Link>
               </li>
               <li>
-                <Link to="/Yazar">Yazar</Link>
+                <Link to="/Yazar">Author</Link>
               </li>
 
               <li>
-                <Link to="/KitapAlma">Kitap Al</Link>
+                <Link to="/KitapAlma">Borrowing Book</Link>
               </li>
             </ul>
           </div>

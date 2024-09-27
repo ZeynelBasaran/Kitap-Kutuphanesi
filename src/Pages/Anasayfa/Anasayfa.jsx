@@ -6,17 +6,17 @@ function Anasayfa() {
     <section className="anasayfa">
       <div className="hero-content">
         <h1>
-          Açık Kütüphaneye <br /> Hoşgeldiniz!
+        Welcome  <br />to Open  Library!
         </h1>
-        <p>Web sitemize hoş geldiniz, burada sizin için harika şeyler var.</p>
+        <p style={{margin:"20px"}}>Welcome to our website, we have some great stuff for you here.</p>
 
         <div className="hero-buttons">
           <Link to="/Kitap" className="btn btn-secondary">
-            Kitapları İncele
+            Books
           </Link>
 
           <Link to="/KitapAlma" className="btn btn-secondary">
-            Kitap Al
+            Borrowing Book
           </Link>
         </div>
       </div>

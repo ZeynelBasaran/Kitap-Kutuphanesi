@@ -40,6 +40,7 @@ function Kitap() {
     editBook,
     setEditBook,
     alerts,
+    editing,setEditing
     
   } = useContext(BookContext);
   const tr = [
@@ -51,7 +52,7 @@ function Kitap() {
     "Delete",
   ];
 
-  //Get Database Author,Publisher,Category,Books
+  //Fetches authors, publishers, categories, and books when the page loads or 'update' changes.
   useEffect(() => {
     getAuthor();
     getPublisher();
@@ -67,7 +68,7 @@ function Kitap() {
     return () => clearTimeout(timer);
   }, [update]);
 
-  //Send to new Book Database
+  //Sends new book data to the API with a POST request.
   const sendToBook = () => {
     console.log("bitti", newBook);
     axios
@@ -93,7 +94,7 @@ function Kitap() {
       });
   };
 
-  //Add New Book İnput and select value
+  //Captures input field changes (name and value).
   const newBookİnp = (e) => {
     const { name, value } = e.target;
     setNewBook({
@@ -101,6 +102,7 @@ function Kitap() {
       [name]: value,
     });
   };
+  //Captures the selected author from the dropdown.
   const authorSelect = (e) => {
     const { value } = e.target;
     const selectAuthor = author.find((item) => item.id === value);
@@ -109,6 +111,7 @@ function Kitap() {
       author: selectAuthor,
     }));
   };
+  //Captures the selected author from the dropdown.
   const categorySelect = (e) => {
     const { value } = e.target;
     const selectCategory = category.find((item) => item.id === value);
@@ -117,6 +120,7 @@ function Kitap() {
       categories: [selectCategory],
     }));
   };
+  //Captures the selected publisher from the dropdown.
   const publisherSelect = (e) => {
     const { value } = e.target;
     const selectPublisher = publisher.find((item) => item.id === value);
@@ -126,7 +130,7 @@ function Kitap() {
     }));
   };
 
-  //Remove Book
+  //// 1. Sends a DELETE request to remove the selected book from the API.
   const removeBook = (item) => {
     axios
       .delete(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/books/${item.id}`)
@@ -146,7 +150,7 @@ function Kitap() {
       });
   };
 
-  //Edit Book
+  //Sends updated book data to the API via PUT request.
   const sendEditBookİnp = () => {
     axios
       .put(
@@ -184,6 +188,7 @@ function Kitap() {
           type: "info",
           message: "Book successfully change",
         });
+        setEditing(false)
       }).catch((error)=> {
         console.log(error)
         setAlerts({
@@ -193,7 +198,7 @@ function Kitap() {
       })
   };
 
-  //Edit Book İnput and select value
+  //Captures input field changes (name and value).
   const editBookİnp = (e) => {
     console.log(e.target);
     const { name, value } = e.target;
@@ -203,8 +208,7 @@ function Kitap() {
     }));
     console.log(editBook);
   };
-
-  
+  //Captures the selected author from the dropdown.
   const editAuthorSelect = (e) => {
     setSelectedAuthor(e.target.value);
     const { value } = e.target;
@@ -214,7 +218,7 @@ function Kitap() {
       author: selectAuthor,
     }));
   };
-
+  //Captures the selected publisher from the dropdown.
   const editPublisherSelect = (e) => {
     setSelectedPublisher(e.target.value);
     const { value } = e.target;
@@ -225,7 +229,7 @@ function Kitap() {
     }));
     console.log(editBook)
   };
-
+  // Captures the selected category from the dropdown.
   const editCategoriesSelect = (e) => {
     setSelectedCategories(e.target.value);
     const { value } = e.target;
@@ -236,16 +240,178 @@ function Kitap() {
     }));
   };
   
-  //Edit Book Button
+  //Sets the selected book's data in the form fields for editing.
   const handleEditBtn = (item) => {
     setEditBook(item);
     setSelectedAuthor(item.author.id);
     setSelectedPublisher(item.publisher.id);
     setSelectedCategories(item.categories[0].id);
+    setEditing((prev) => !prev);
   };
 
   return (
     <div className="kitap">
+    <Alerts type={alerts.type} message={alerts.message} />
+    <Accordion className="addİtem">
+      <AccordionSummary
+        expandIcon={<ArrowDropDownIcon />}
+        aria-controls="panel2-content"
+        id="panel2-header"
+      >
+        <Typography>{editing ? "EDIT BOOK" : "ADD NEW BOOK"}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box
+          component="form"
+          sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+          noValidate
+          autoComplete="on"
+          className="input-box"
+        >
+          <TextField
+            required
+            id="outlined-required"
+            label="Publication Name"
+            type="text"
+            onChange={editing ? editBookİnp : newBookİnp}
+            value={editing ? editBook.name : newBook.name}
+            name="name"
+            size="small"
+          />
+  
+          <TextField
+            required
+            id="outlined-required"
+            label="Publication Year"
+            type="number"
+            onChange={editing ? editBookİnp : newBookİnp}
+            value={editing ? editBook.publicationYear : newBook.publicationYear}
+            name="publicationYear"
+            size="small"
+          />
+          <TextField
+            required
+            id="outlined-required"
+            label="Stock"
+            type="number"
+            onChange={editing ? editBookİnp : newBookİnp}
+            value={editing ? editBook.stock : newBook.stock}
+            name="stock"
+            size="small"
+          />
+        </Box>
+  
+        <Box
+          component="form"
+          sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+          noValidate
+          autoComplete="on"
+          className="input-box selectBox"
+        >
+          <Select
+            name="author"
+            value={editing ? selectedAuthor : 0}
+            onChange={editing ? editAuthorSelect : authorSelect}
+            size="small"
+          >
+            <MenuItem value={0} disabled>
+              Select Author
+            </MenuItem>
+            {author?.map((item, idx) => (
+              <MenuItem value={item.id} key={`${item.name}${idx}`}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+  
+          <Select
+            name="publisher"
+            value={editing ? selectedPublisher : 0}
+            onChange={editing ? editPublisherSelect : publisherSelect}
+            size="small"
+          >
+            <MenuItem value={0} disabled>
+              Select Publisher
+            </MenuItem>
+            {publisher?.map((item, idx) => (
+              <MenuItem value={item.id} key={`${item.name}${idx}`}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+  
+          <Select
+            name="categories"
+            value={editing ? selectedCategories : 0}
+            onChange={editing ? editCategoriesSelect : categorySelect}
+            size="small"
+          >
+            <MenuItem value={0} disabled>
+              Select Category
+            </MenuItem>
+            {category?.map((item, idx) => (
+              <MenuItem value={item.id} key={`${item.name}${idx}`}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+  
+        <Box className="addBox">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={editing ? sendEditBookİnp : sendToBook}
+          >
+            {editing ? "CHANGE" : "ADD TO BOOK"}
+          </Button>
+        </Box>
+      </AccordionDetails>
+    </Accordion>
+  
+    <table>
+      <thead>
+        <tr>
+          {tr.map((item, idx) => (
+            <th key={`${item}${idx}`}>{item}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {books?.map((item, idx) => (
+          <tr key={`${item}${idx}`}>
+            <td className="cursor-icon">
+              <ModeEditIcon
+                onClick={() => {
+                  handleEditBtn(item);
+                }}
+              />
+            </td>
+            <td>{`${item?.name} (${item?.publicationYear}) Stok: ${item?.stock}`}</td>
+            <td>{`${item.author?.name} (${item.author?.birthDate}) - ${item.author?.country}`}</td>
+            <td>{item.categories[0]?.name} - {item.categories[0]?.description}</td>
+            <td>{item.publisher?.name} - {item.publisher?.establishmentYear}</td>
+            <td>
+              <DeleteIcon
+                className="cursor-icon"
+                onClick={() => {
+                  removeBook(item);
+                }}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  
+  );
+}
+
+export default Kitap;
+
+/*
+   <div className="kitap">
       <Alerts type={alerts.type} message={alerts.message} />
       <Accordion className="addİtem">
         <AccordionSummary
@@ -514,45 +680,5 @@ function Kitap() {
         </tbody>
       </table>
     </div>
-  );
-}
 
-export default Kitap;
-
-/*
-
-
-
-
-*/
-
-/*
- const editAuthorSelect = (e) => {
-    const { value } = e.target;
-    const selAuthor = author.find((item) => item.id === value);
-    setEditBook((prev) => ({
-      ...prev,
-      author: selAuthor,
-    }));
-  };
-  const editPublisherSelect = (e) => {
-    const { value } = e.target;
-    const selPublisher = publisher.find((item) => item.id === value);
-    setEditBook((prev) => ({
-      ...prev,
-      author: selPublisher,
-    }));
-  };
-  const editCategoriesSelect = (e) => {
-    const { value } = e.target;
-    const selCategory = category.find((item) => item.id === value);
-    setEditBook((prev) => ({
-      ...prev,
-      author: [selCategory],
-    }));
-  };
-
-  
-  
-  
 */
