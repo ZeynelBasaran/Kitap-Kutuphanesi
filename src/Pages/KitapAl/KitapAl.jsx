@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 import { BookContext } from "../../Context/BookContext";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -17,6 +17,8 @@ import MenuItem from "@mui/material/MenuItem";
 import "./kitapalma.css";
 
 function KitapAlma() {
+  const [selectedBook, setSelectedBook] = useState("");
+
   const {
     borrow,
     newBorrow,
@@ -34,7 +36,6 @@ function KitapAlma() {
     setUpdate,
     setAlerts,
     books,
-    setBooks,
   } = useContext(BookContext);
   const tr = [
     "Edit",
@@ -133,6 +134,7 @@ function KitapAlma() {
       ...prev,
       bookForBorrowingRequest: selectAuthor,
     }));
+    console.log(newBorrow);
   };
 
   //Remove Borrow
@@ -146,7 +148,8 @@ function KitapAlma() {
           message: "Borrow successfully deleted",
         });
         setUpdate(false);
-      }).catch(()=>{
+      })
+      .catch(() => {
         setAlerts({
           type: "error",
           message: "Borrow not deleted",
@@ -200,13 +203,14 @@ function KitapAlma() {
           type: "info",
           message: "Borrow successfully change",
         });
-      }).catch(() => {
+      })
+      .catch(() => {
         setAlerts({
           type: "error",
           message: "Borrow not added",
         });
         setUpdate(false);
-      });;
+      });
   };
 
   //Edit Publisher İnput ve select value
@@ -216,21 +220,10 @@ function KitapAlma() {
       ...prev,
       [name]: value,
     }));
-    console.log();
+    console.log(editBorrow)
   };
-
-  const bookSelect = (e) => {
-    const { value } = e.target;
-    const selectBooks = books.find((item) => item.id === value);
-    setBooks((prev) => ({
-      ...prev,
-      books: selectBooks,
-    }));
-  };
-
-  console.log(borrow);
-
-  //Edit Publisher Button
+  
+  //Edit Borrow Button
   const handleEditBtn = (item) => {
     setEditBorrow(item);
   };
@@ -278,25 +271,18 @@ function KitapAlma() {
                 size="small"
               />
               <TextField
+              style={{marginTop: '32px'}}
                 required
                 id="outlined-required"
-                label="Borrowing Date"
+                helperText="Borrowing Date"
                 onChange={newBorrowİnp}
                 value={newBorrow.borrowingDate}
                 name="borrowingDate"
                 size="small"
                 type="date"
               />
-              <TextField
-                required
-                id="outlined-required"
-                label="Return Date"
-                onChange={newBorrowİnp}
-                value={newBorrow.returnDate}
-                name="returnDate"
-                size="small"
-                type="date"
-              />
+              
+             
             </Box>
 
             <Box
@@ -356,33 +342,33 @@ function KitapAlma() {
               <TextField
                 required
                 id="outlined-required"
-                label="Publication Name"
+                label="Borrower Name"
                 type="text"
                 onChange={editBorrowİnp}
                 value={editBorrow.borrowerName}
                 name="borrowerName"
                 size="small"
               />
-
               <TextField
+              style={{marginTop: '30px'}}
                 required
                 id="outlined-required"
-                label="Publication Year"
-                type="number"
+                helperText="Borrowing Date"
                 onChange={editBorrowİnp}
-                value={editBorrow.publicationYear}
-                name="publicationYear"
+                value={editBorrow.borrowingDate}
+                name="borrowingDate"
                 size="small"
+                type="date"
               />
               <TextField
+              style={{marginTop: '30px'}}
                 required
                 id="outlined-required"
-                label="Stock"
                 onChange={editBorrowİnp}
-                value={editBorrow.stock}
-                name="stock"
+                name="returnDate"
                 size="small"
-                type="number"
+                type="date"
+                helperText="Return Date"
               />
             </Box>
 
@@ -392,7 +378,7 @@ function KitapAlma() {
                 color="success"
                 onClick={sendEditBorrowİnp}
               >
-                CHANGE
+                CHANGE BORROW
               </Button>
             </Box>
           </AccordionDetails>
@@ -407,7 +393,7 @@ function KitapAlma() {
             </tr>
           </thead>
           <tbody>
-            {borrow.map((item, idx) => (
+            {borrow?.map((item, idx) => (
               <tr key={`${item}${idx}`}>
                 <td className="cursor-icon">
                   <ModeEditIcon
@@ -445,7 +431,16 @@ function KitapAlma() {
 export default KitapAlma;
 
 /*
-
+ <TextField
+                required
+                id="outlined-required"
+                label="Return Date"
+                onChange={newBorrowİnp}
+                value={newBorrow.returnDate}
+                name="returnDate"
+                size="small"
+                type="date"
+              />
 
 
 

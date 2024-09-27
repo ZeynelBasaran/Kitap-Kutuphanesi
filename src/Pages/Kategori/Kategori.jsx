@@ -4,7 +4,6 @@ import { useContext, useEffect } from "react";
 import { BookContext } from "../../Context/BookContext";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import "./kategori.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";

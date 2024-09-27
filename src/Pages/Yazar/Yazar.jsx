@@ -166,9 +166,10 @@ function Yazar() {
             />
 
             <TextField
+            style={{marginTop: '32px'}}
               required
               id="outlined-required"
-              label=""
+              helperText="Birth Date"
               type="date"
               onChange={newAuthorİnp}
               value={newAuthor.birthDate}
