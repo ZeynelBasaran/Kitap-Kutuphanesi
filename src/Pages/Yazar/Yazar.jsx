@@ -10,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
-import "./yazar.css";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import Alerts from "../../Components/Alert";
 

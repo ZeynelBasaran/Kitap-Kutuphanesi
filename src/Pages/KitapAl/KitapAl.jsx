@@ -14,7 +14,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Alerts from "../../Components/Alert";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import "./kitapalma.css";
 
 function KitapAlma() {
   const [selectedBook, setSelectedBook] = useState("");
