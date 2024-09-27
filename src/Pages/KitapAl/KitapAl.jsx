@@ -16,8 +16,6 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 function KitapAlma() {
-  const [selectedBook, setSelectedBook] = useState("");
-
   const {
     borrow,
     newBorrow,

@@ -1,4 +1,4 @@
-import "../Anasayfa/Anasayfa.css";
+
 import { Link } from "react-router-dom";
 
 function Anasayfa() {
