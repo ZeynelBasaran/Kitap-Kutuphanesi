@@ -9,11 +9,13 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
-html, body {
+html,
+body {
   height: 100%;
 }
 a {
   text-decoration: none;
+  color: #ffffff;
 }
 li {
   list-style-type: none;
@@ -24,7 +26,6 @@ li {
   flex-direction: column;
 }
 
-
 /*Navbar*/
 .navbar {
   padding: 0 8%;
@@ -32,8 +33,7 @@ li {
   align-items: center;
   justify-content: space-between;
   height: 70px;
-  background-color: #4b5043;
-  color: white;
+  background-color: #4571a0;
   position: fixed;
   top: 0;
   z-index: 100;
@@ -45,9 +45,6 @@ li {
   align-items: center;
   justify-content: center;
 }
-.navbar .logo a {
-  color: white;
-}
 
 .navbar .logo a img {
   width: 40px;
@@ -57,13 +54,17 @@ li {
   display: flex;
   justify-content: space-around;
 }
-.navbar .menu1 li a,
-.navbar .logo a,
-.navbar .menu2 li a {
-  color: white;
+.navbar ul li {
+  font-weight: 600;
 }
+
 .navbar .menu1 {
-  gap: 10px;
+  gap: 20px;
+}
+.navbar .menu1 li a:hover,
+.navbar .logo a:hover,
+.navbar .menu2 li a:hover {
+  color: #000000;
 }
 
 /*Addİtem Components */
@@ -93,17 +94,17 @@ td {
   transition: background-color 0.3s ease;
 }
 th {
-  background-color: #707765;
+  background-color: #8EACCD;
   font-weight: bold;
 }
 
 tr:hover {
-  background-color: #707765;
+  background-color: #D2E0FB;
 }
 
 td:hover {
-  color: #333;
-  background-color: #a5af95;
+  color: #FEF9D9;
+  background-color: #9ab0de;
 }
 
 table:hover {
@@ -116,24 +117,24 @@ table:hover {
 
 /* Footer */
 .footer {
-  background-color: #4b5043;
+  background-color: #4571a0;
   color: white;
-  padding: 5px 0;
+  padding: 10px 0;
   text-align: center;
   bottom: 0;
+  font-size: 14px;
 }
 
 .footer-content {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
-  padding: 5px;
 }
 
 .footer-section {
   flex: 1;
-  min-width: 50px;
-  margin: 10px;
+  min-width: 100px;
+  
 }
 
 .footer-section h4 {
@@ -142,10 +143,17 @@ table:hover {
 .footer-section ul {
   list-style-type: none;
 }
+.footer-section ul li{
+  margin-bottom: 5px;
+}
+.footer-section ul li a:hover{
+  color: #000000;
+}
 
 .footer-section a {
   color: #ffffff;
   text-decoration: none;
+  
 }
 
 .footer-section a:hover {
@@ -154,14 +162,18 @@ table:hover {
 
 .footer-bottom {
   background-color: #222;
-  padding: 10px 0;
+  padding: 5px 0;
   margin-top: 20px;
 }
 
 /*
 Sayfaların CSS özellikleri
 */
-.kategori,.kitap,.kitapal,.yayimci,.yazar {
+.kategori,
+.kitap,
+.kitapal,
+.yayimci,
+.yazar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -173,7 +185,7 @@ Sayfaların CSS özellikleri
   margin: 10px 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
- .addİtem:hover {
+.addİtem:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 table {
@@ -197,7 +209,7 @@ table {
   padding: 5px;
 }
 .yazar th:nth-child(3),
-.yazar td:nth-child(3){
+.yazar td:nth-child(3) {
   width: 10%;
 }
 .yayimci th:nth-child(5),
@@ -213,13 +225,13 @@ table {
   width: 5%; /* İkinci sütunu daha dar yap */
   text-align: center; /* Ortalamak için */
 }
-.addBox{
+.addBox {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
 }
-.selectBox{
+.selectBox {
   margin-top: 20px;
 }
 .kitap th:nth-child(6),
@@ -231,13 +243,11 @@ table {
   padding: 5px;
 }
 
-
-
 /*  Anasayfa */
 .anasayfa {
   display: flex;
   justify-content: center;
-  background: url(public/1.jpg);
+  
   background-size: cover; /* Görselin tam ekranı kaplamasını sağlar */
   background-position: center; /* Görseli ortalar */
   background-repeat: no-repeat;
@@ -247,17 +257,17 @@ table {
 
 .hero-content {
   text-align: center;
-  color: #4B5043;
-  margin:200px 0;
+  color: #000000;
+  margin: 200px 0;
 }
 
-.hero h1 {
+.anasayfa h1 {
   font-size: 3rem;
 }
 
-.hero p {
+.anasayfa p {
   font-size: 1.5rem;
-  margin: 20px 0;
+  margin: 30px 0;
 }
 
 .hero-buttons {
@@ -270,15 +280,17 @@ table {
   text-decoration: none;
   border-radius: 5px;
   cursor: pointer;
-  color: #ffffff;
-  background-color: #4B5043;
+  color: #000000;
+  background-color: transparent;
+  border: 1px solid #000000;
 }
 
 .btn:hover {
   background-color: #ffffff;
-  color: #4B5043;
+  color: #000000;
 }
-.btn-secondary{
+
+.btn-secondary {
   margin-left: 10px;
 }
 
