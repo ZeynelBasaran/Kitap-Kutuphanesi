@@ -19,7 +19,7 @@ function Footer() {
             <h4>Links</h4>
             <ul>
               <li>
-                <Link to="/Yayımcı">PUBLİSHER</Link>
+                <Link to="/Yayımcı">PUBLISHER</Link>
               </li>
               <li>
                 <Link to="/Kategori">CATEGORY</Link>
@@ -32,7 +32,7 @@ function Footer() {
               </li>
 
               <li>
-                <Link to="/KitapAlma">BORROWİNG BOOK</Link>
+                <Link to="/KitapAlma">BORROWING BOOK</Link>
               </li>
             </ul>
           </div>
