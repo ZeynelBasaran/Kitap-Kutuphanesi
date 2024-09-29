@@ -13,9 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Alerts from "../../Components/Alert";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 
-
 function Yayımcı() {
-  
   const {
     publisher,
     setPublisher,
@@ -29,7 +27,7 @@ function Yayımcı() {
     setUpdate,
     getPublisher,
     editing,
-    setEditing
+    setEditing,
   } = useContext(BookContext);
   const tr = ["Edit", "Name", "EstablishmentYear", "Address", "Delete"];
 
@@ -74,6 +72,7 @@ function Yayımcı() {
           message: "Publisher Added Successfully",
         });
         setUpdate(false);
+        console.log(newPublisher)
       })
       .catch(() => {
         setAlerts({
@@ -129,7 +128,7 @@ function Yayımcı() {
           type: "info",
           message: "Publisher successfully change",
         });
-        setEditing(false)
+        setEditing(false);
       })
       .catch(() => {
         setAlerts({
@@ -147,113 +146,17 @@ function Yayımcı() {
       ...prev,
       [name]: value,
     }));
-    
   };
   //Selects the publisher to edit and updates the state.
   const handleEditBtn = (item) => {
     setEditPublisher(item);
-    setEditing((prev)=> !prev)
+    setEditing((prev) => !prev);
   };
 
+  
+
   return (
-      <div className="yayimci">
-        <Alerts type={alerts.type} message={alerts.message} />
-    
-        <Accordion className="addİtem">
-          <AccordionSummary
-            expandIcon={<ArrowDropDownIcon />}
-            aria-controls="panel2-content"
-            id="panel2-header"
-          >
-            <Typography>{editing ? "EDIT PUBLISHER" : "ADD NEW PUBLISHER"}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              component="form"
-              sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-              noValidate
-              autoComplete="on"
-              className="input-box"
-            >
-              <TextField
-                required
-                id="outlined-required"
-                label="Publisher Name"
-                onChange={editing ? editPublisherİnp : newPublisherİnp}
-                value={editing ? editPublisher.name : newPublisher.name}
-                name="name"
-                size="small"
-                type="text"
-              />
-              <TextField
-                required
-                id="outlined-required"
-                label="Establishment Year"
-                type="number"
-                onChange={editing ? editPublisherİnp : newPublisherİnp}
-                value={editing ? editPublisher.establishmentYear : newPublisher.establishmentYear}
-                name="establishmentYear"
-                size="small"
-              />
-              <TextField
-                required
-                id="outlined-required"
-                label="Address"
-                onChange={editing ? editPublisherİnp : newPublisherİnp}
-                value={editing ? editPublisher.address : newPublisher.address}
-                name="address"
-                size="small"
-                type="text"
-              />
-              <Button
-                variant="contained"
-                color="success"
-                onClick={editing ? sendEditPublisherİnp : sendToPublisher}
-              >
-                {editing ? "CHANGE PUBLISHER" : "ADD"}
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-    
-        <table>
-          <thead>
-            <tr>
-              {tr.map((item, idx) => (
-                <th key={`${item}${idx}`}>{item}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {publisher.map((item, idx) => (
-              <tr key={`${item}${idx}`}>
-                <td className="cursor-icon">
-                  <ModeEditIcon onClick={() => handleEditBtn(item)} />
-                </td>
-                <td>{item.name}</td>
-                <td>{item.establishmentYear}</td>
-                <td>{item.address}</td>
-                <td>
-                  <DeleteIcon
-                    className="cursor-icon"
-                    onClick={() => removePublisher(item)}
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    
-    
-  );
-}
-
-export default Yayımcı;
-
-
-/*
-  <div className="yayimci">
+    <div className="yayimci">
       <Alerts type={alerts.type} message={alerts.message} />
 
       <Accordion className="addİtem">
@@ -262,7 +165,9 @@ export default Yayımcı;
           aria-controls="panel2-content"
           id="panel2-header"
         >
-          <Typography>ADD NEW PUBLİSHER</Typography>
+          <Typography>
+            {editing ? "EDIT PUBLISHER" : "ADD NEW PUBLISHER"}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Box
@@ -276,8 +181,8 @@ export default Yayımcı;
               required
               id="outlined-required"
               label="Publisher Name"
-              onChange={newPublisherİnp}
-              value={newPublisher.name}
+              onChange={editing ? editPublisherİnp : newPublisherİnp}
+              value={editing ? editPublisher.name : newPublisher.name}
               name="name"
               size="small"
               type="text"
@@ -287,8 +192,12 @@ export default Yayımcı;
               id="outlined-required"
               label="Establishment Year"
               type="number"
-              onChange={newPublisherİnp}
-              value={newPublisher.establishmentYear}
+              onChange={editing ? editPublisherİnp : newPublisherİnp}
+              value={
+                editing
+                  ? editPublisher.establishmentYear
+                  : newPublisher.establishmentYear
+              }
               name="establishmentYear"
               size="small"
             />
@@ -296,8 +205,8 @@ export default Yayımcı;
               required
               id="outlined-required"
               label="Address"
-              onChange={newPublisherİnp}
-              value={newPublisher.address}
+              onChange={editing ? editPublisherİnp : newPublisherİnp}
+              value={editing ? editPublisher.address : newPublisher.address}
               name="address"
               size="small"
               type="text"
@@ -305,78 +214,19 @@ export default Yayımcı;
             <Button
               variant="contained"
               color="success"
-              onClick={sendToPublisher}
+              onClick={editing ? sendEditPublisherİnp : sendToPublisher}
             >
-              ADD
+              {editing ? "CHANGE PUBLISHER" : "ADD"}
             </Button>
           </Box>
         </AccordionDetails>
       </Accordion>
-      {editing && (
-        <Accordion className="addİtem">
-          <AccordionSummary
-            expandIcon={<ArrowDropDownIcon />}
-            aria-controls="panel2-content"
-            id="panel2-header"
-          >
-            <Typography>EDİT PUBLİSHER</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Box
-              component="form"
-              sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-              noValidate
-              autoComplete="on"
-              className="input-box"
-            >
-              <TextField
-                required
-                id="outlined-required"
-                label="Publisher Name"
-                className=""
-                onChange={editPublisherİnp}
-                value={editPublisher.name}
-                name="name"
-                size="small"
-              />
-              <TextField
-                required
-                id="outlined-required"
-                label="Establishment Year"
-                type="number"
-                onChange={editPublisherİnp}
-                value={editPublisher.establishmentYear}
-                name="establishmentYear"
-                size="small"
-              />
-              <TextField
-                required
-                id="outlined-required"
-                label="Address"
-                onChange={editPublisherİnp}
-                value={editPublisher.address}
-                name="address"
-                size="small"
-              />
-              <Button
-                variant="contained"
-                color="success"
-                onClick={(e) => {
-                  sendEditPublisherİnp(e);
-                }}
-              >
-                CHANGE PUBLİSHER
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion>
-      )}
 
       <table>
         <thead>
           <tr>
             {tr.map((item, idx) => (
-              <th key={`${item}${idx} `}>{item}</th>
+              <th key={`${item}${idx}`}>{item}</th>
             ))}
           </tr>
         </thead>
@@ -384,11 +234,7 @@ export default Yayımcı;
           {publisher.map((item, idx) => (
             <tr key={`${item}${idx}`}>
               <td className="cursor-icon">
-                <ModeEditIcon
-                  onClick={() => {
-                    handleEditBtn(item);
-                  }}
-                />
+                <ModeEditIcon onClick={() => handleEditBtn(item)} />
               </td>
               <td>{item.name}</td>
               <td>{item.establishmentYear}</td>
@@ -396,9 +242,7 @@ export default Yayımcı;
               <td>
                 <DeleteIcon
                   className="cursor-icon"
-                  onClick={() => {
-                    removePublisher(item);
-                  }}
+                  onClick={() => removePublisher(item)}
                 />
               </td>
             </tr>
@@ -406,5 +250,169 @@ export default Yayımcı;
         </tbody>
       </table>
     </div>
+  );
+}
 
+export default Yayımcı;
+
+/*
+
+ 
+
+*/
+
+/*
+ <div className="yayimci">
+    <Alerts type={alerts.type} message={alerts.message} />
+
+    <Accordion className="addİtem">
+      <AccordionSummary
+        expandIcon={<ArrowDropDownIcon />}
+        aria-controls="panel2-content"
+        id="panel2-header"
+      >
+        <Typography>ADD NEW PUBLİSHER</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box
+          component="form"
+          sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+          noValidate
+          autoComplete="on"
+          className="input-box"
+        >
+          <TextField
+            required
+            id="outlined-required"
+            label="Publisher Name"
+            onChange={newPublisherİnp}
+            value={newPublisher.name}
+            name="name"
+            size="small"
+            type="text"
+          />
+          <TextField
+            required
+            id="outlined-required"
+            label="Establishment Year"
+            type="number"
+            onChange={newPublisherİnp}
+            value={newPublisher.establishmentYear}
+            name="establishmentYear"
+            size="small"
+          />
+          <TextField
+            required
+            id="outlined-required"
+            label="Address"
+            onChange={newPublisherİnp}
+            value={newPublisher.address}
+            name="address"
+            size="small"
+            type="text"
+          />
+          <Button
+            variant="contained"
+            color="success"
+            onClick={sendToPublisher}
+          >
+            ADD
+          </Button>
+        </Box>
+      </AccordionDetails>
+    </Accordion>
+    {editing && (
+      <Accordion className="addİtem">
+        <AccordionSummary
+          expandIcon={<ArrowDropDownIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography>EDİT PUBLİSHER</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Box
+            component="form"
+            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            noValidate
+            autoComplete="on"
+            className="input-box"
+          >
+            <TextField
+              required
+              id="outlined-required"
+              label="Publisher Name"
+              className=""
+              onChange={editPublisherİnp}
+              value={editPublisher.name}
+              name="name"
+              size="small"
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Establishment Year"
+              type="number"
+              onChange={editPublisherİnp}
+              value={editPublisher.establishmentYear}
+              name="establishmentYear"
+              size="small"
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Address"
+              onChange={editPublisherİnp}
+              value={editPublisher.address}
+              name="address"
+              size="small"
+            />
+            <Button
+              variant="contained"
+              color="success"
+              onClick={(e) => {
+                sendEditPublisherİnp(e);
+              }}
+            >
+              CHANGE PUBLİSHER
+            </Button>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    )}
+
+    <table>
+      <thead>
+        <tr>
+          {tr.map((item, idx) => (
+            <th key={`${item}${idx} `}>{item}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {publisher.map((item, idx) => (
+          <tr key={`${item}${idx}`}>
+            <td className="cursor-icon">
+              <ModeEditIcon
+                onClick={() => {
+                  handleEditBtn(item);
+                }}
+              />
+            </td>
+            <td>{item.name}</td>
+            <td>{item.establishmentYear}</td>
+            <td>{item.address}</td>
+            <td>
+              <DeleteIcon
+                className="cursor-icon"
+                onClick={() => {
+                  removePublisher(item);
+                }}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
 */

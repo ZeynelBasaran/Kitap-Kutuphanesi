@@ -238,9 +238,12 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      //console.log("Borrows Yüklendi.",borrow);
+      console.log("Borrows Yüklendi.",borrow);
     }
   };
+
+  
+  
 
   return (
     <BookContext.Provider

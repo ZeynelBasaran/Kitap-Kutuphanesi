@@ -65,7 +65,6 @@ function KitapAlma() {
 
   //Sends new borrow record data to the API with a POST request.
   const sendToBorrow = () => {
-    console.log("bitti", newBorrow);
     axios
       .post(`${import.meta.env.VITE_APP_BASE_URL}/api/v1/borrows`, newBorrow)
       .then((response) => {
@@ -107,6 +106,7 @@ function KitapAlma() {
           type: "success",
           message: "Borrow Added Successfully",
         });
+        
       })
       .catch(() => {
         setAlerts({
@@ -129,12 +129,13 @@ function KitapAlma() {
   //Captures the selected book from the dropdown.
   const booksSelect = (e) => {
     const { value } = e.target;
-    const selectAuthor = books.find((item) => item.id === value);
+    console.log(value)
+    const selectBooks = books.find((item) => item.id === value);
     setNewBorrow((prev) => ({
       ...prev,
-      bookForBorrowingRequest: selectAuthor,
+      bookForBorrowingRequest: selectBooks,
     }));
-    console.log(newBorrow);
+    
   };
 
   // Sends a DELETE request to remove the selected borrow record from the API.
@@ -222,7 +223,6 @@ function KitapAlma() {
       ...prev,
       [name]: value,
     }));
-    console.log(editBorrow);
   };
 
   //Sets the selected borrow record's data in the form fields for editing.

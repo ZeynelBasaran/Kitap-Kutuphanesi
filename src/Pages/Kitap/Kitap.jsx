@@ -18,9 +18,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Alerts from "../../Components/Alert";
 
 function Kitap() {
-  const [selectedAuthor, setSelectedAuthor] = useState("");
-  const [selectedPublisher, setSelectedPublisher] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState("");
+  
+  const [selectedAuthor, setSelectedAuthor] = useState(0);
+  const [selectedPublisher, setSelectedPublisher] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState(0);
 
   const {
     newBook,
@@ -51,6 +52,7 @@ function Kitap() {
     "Publisher İnfo",
     "Delete",
   ];
+  
 
   //Fetches authors, publishers, categories, and books when the page loads or 'update' changes.
   useEffect(() => {
@@ -85,6 +87,7 @@ function Kitap() {
           type: "success",
           message: "Book Added Successfully",
         });
+        
       }).catch(() => {
         setAlerts({
           type: "error",
@@ -104,6 +107,7 @@ function Kitap() {
   };
   //Captures the selected author from the dropdown.
   const authorSelect = (e) => {
+    setSelectedAuthor(e.target.value);
     const { value } = e.target;
     const selectAuthor = author.find((item) => item.id === value);
     setNewBook((prev) => ({
@@ -113,6 +117,7 @@ function Kitap() {
   };
   //Captures the selected author from the dropdown.
   const categorySelect = (e) => {
+    setSelectedCategories(e.target.value);
     const { value } = e.target;
     const selectCategory = category.find((item) => item.id === value);
     setNewBook((prev) => ({
@@ -122,6 +127,7 @@ function Kitap() {
   };
   //Captures the selected publisher from the dropdown.
   const publisherSelect = (e) => {
+    setSelectedPublisher(e.target.value);
     const { value } = e.target;
     const selectPublisher = publisher.find((item) => item.id === value);
     setNewBook((prev) => ({
@@ -200,13 +206,11 @@ function Kitap() {
 
   //Captures input field changes (name and value).
   const editBookİnp = (e) => {
-    console.log(e.target);
     const { name, value } = e.target;
     setEditBook((prev) => ({
       ...prev,
       [name]: value,
     }));
-    console.log(editBook);
   };
   //Captures the selected author from the dropdown.
   const editAuthorSelect = (e) => {
@@ -250,7 +254,8 @@ function Kitap() {
   };
 
   return (
-    <div className="kitap">
+  
+<div className="kitap">
     <Alerts type={alerts.type} message={alerts.message} />
     <Accordion className="addİtem">
       <AccordionSummary
@@ -310,9 +315,10 @@ function Kitap() {
         >
           <Select
             name="author"
-            value={editing ? selectedAuthor : 0}
+            value={selectedAuthor}
             onChange={editing ? editAuthorSelect : authorSelect}
             size="small"
+            
           >
             <MenuItem value={0} disabled>
               Select Author
@@ -326,9 +332,10 @@ function Kitap() {
   
           <Select
             name="publisher"
-            value={editing ? selectedPublisher : 0}
+            value={selectedPublisher}
             onChange={editing ? editPublisherSelect : publisherSelect}
             size="small"
+            
           >
             <MenuItem value={0} disabled>
               Select Publisher
@@ -342,7 +349,7 @@ function Kitap() {
   
           <Select
             name="categories"
-            value={editing ? selectedCategories : 0}
+            value={selectedCategories}
             onChange={editing ? editCategoriesSelect : categorySelect}
             size="small"
           >
@@ -388,9 +395,9 @@ function Kitap() {
               />
             </td>
             <td>{`${item?.name} (${item?.publicationYear}) Stok: ${item?.stock}`}</td>
-            <td>{`${item.author?.name} (${item.author?.birthDate}) - ${item.author?.country}`}</td>
-            <td>{item.categories[0]?.name} - {item.categories[0]?.description}</td>
-            <td>{item.publisher?.name} - {item.publisher?.establishmentYear}</td>
+            <td>{`${item?.author?.name} (${item?.author?.birthDate}) - ${item?.author?.country}`}</td>
+            <td>{item?.categories[0]?.name} - {item.categories[0]?.description}</td>
+            <td>{item?.publisher?.name} - {item?.publisher?.establishmentYear}</td>
             <td>
               <DeleteIcon
                 className="cursor-icon"
@@ -409,6 +416,12 @@ function Kitap() {
 }
 
 export default Kitap;
+/*
+setSelectedAuthor("0")
+        setSelectedAuthor("0")
+        setSelectedCategories("0")
+*/
+
 
 /*
    <div className="kitap">
@@ -682,3 +695,7 @@ export default Kitap;
     </div>
 
 */
+
+
+/*
+  */

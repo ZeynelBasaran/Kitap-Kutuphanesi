@@ -223,8 +223,8 @@ function Kategori() {
                   }}
                 />
               </td>
-              <td>{item.name}</td>
-              <td>{item.description}</td>
+              <td>{item?.name}</td>
+              <td>{item?.description}</td>
               <td>
                 <DeleteIcon
                   className="cursor-icon"
