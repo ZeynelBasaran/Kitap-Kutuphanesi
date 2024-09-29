@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createContext, useState } from "react";
 const BookContext = createContext();
-axios;
+
 
 function BookContextComp({ children }) {
   const [editing, setEditing] = useState(false);
@@ -244,6 +244,8 @@ function BookContextComp({ children }) {
       //console.log("Borrows Yüklendi.",borrow);
     }
   };
+
+  console.log(import.meta.env.VITE_APP_BASE_URL)
 
   
 
