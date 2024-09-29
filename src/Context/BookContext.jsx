@@ -104,7 +104,7 @@ function BookContextComp({ children }) {
     country: "",
   });
 
-  //Author States
+  //Borrow States
   const [borrow, setBorrow] = useState([]);
   const [newBorrow, setNewBorrow] = useState({
     id: "0",
@@ -197,10 +197,9 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      //console.log("Category Yüklendi.");
+      console.log("Category Yüklendi.");
     }
   };
-
   const getAuthor = async () => {
     try {
       const response = await axios.get(
@@ -212,10 +211,9 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      //console.log("Author Yüklendi.");
+      console.log("Author Yüklendi.");
     }
   };
-
   const getBooks = async () => {
     try {
       const response = await axios.get(
@@ -227,10 +225,9 @@ function BookContextComp({ children }) {
     } catch (error) {
       console.log(error);
     } finally {
-      //console.log("Books Yüklendi.");
+      console.log("Books Yüklendi.");
     }
   };
-
   const getBorrow = async () => {
     try {
       const response = await axios.get(
@@ -244,10 +241,6 @@ function BookContextComp({ children }) {
       //console.log("Borrows Yüklendi.",borrow);
     }
   };
-
-  console.log(import.meta.env.VITE_APP_BASE_URL)
-
-  
 
   return (
     <BookContext.Provider
